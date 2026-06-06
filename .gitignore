@@ -1,1 +1,9 @@
+build/
+results/
+*.o
+*.a
+*.so
+.DS_Store
+*.trace
+*.paje
 docker_rtx4060/starpu-runtime-rtx4060.tar.gz

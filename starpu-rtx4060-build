@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE="${STARPU_DOCKER_IMAGE:-starpu-cuda-rtx4060}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+IMAGE="${STARPU_DOCKER_IMAGE:-starpu-cuda-rtx4060}"
+
+if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+  echo "Image '$IMAGE' not found. Run: ./scripts/build-docker.sh"
+  exit 1
+fi
 
 GPU_ARGS=()
 if [[ "${USE_GPU:-0}" == "1" ]]; then
@@ -23,6 +28,6 @@ docker run --rm "${GPU_ARGS[@]}" \
       -DCMAKE_CUDA_ARCHITECTURES=89
     cmake --build . -j"$(nproc)"
     echo ""
-    echo "Build complete:"
+    echo "Build complete. Binaries in build/"
     ls -1 bench_* hello_starpu 2>/dev/null || true
   '
