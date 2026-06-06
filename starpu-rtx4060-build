@@ -1,17 +1,28 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-IMAGE="starpu-cuda-rtx4060"
+IMAGE="${STARPU_DOCKER_IMAGE:-starpu-cuda-rtx4060}"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-docker run --rm -it \
-  -v "$(pwd)":/workspace \
+GPU_ARGS=()
+if [[ "${USE_GPU:-0}" == "1" ]]; then
+  GPU_ARGS=(--gpus all)
+fi
+
+docker run --rm "${GPU_ARGS[@]}" \
+  -v "$ROOT:/workspace" \
   -w /workspace \
+  -u "$(id -u):$(id -g)" \
   "$IMAGE" \
   bash -lc '
+    set -euo pipefail
     mkdir -p build
     cd build
     cmake .. \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_CUDA_ARCHITECTURES=89
-    make -j$(nproc)
+    cmake --build . -j"$(nproc)"
+    echo ""
+    echo "Build complete:"
+    ls -1 bench_* hello_starpu 2>/dev/null || true
   '
