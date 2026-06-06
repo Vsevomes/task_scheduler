@@ -1,0 +1,8 @@
+build/
+results/
+*.o
+*.a
+*.so
+.DS_Store
+*.trace
+*.paje
