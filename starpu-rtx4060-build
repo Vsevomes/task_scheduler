@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+IMAGE="starpu-cuda-rtx4060"
+
+docker run --rm -it \
+  -v "$(pwd)":/workspace \
+  -w /workspace \
+  "$IMAGE" \
+  bash -lc '
+    mkdir -p build
+    cd build
+    cmake .. \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CUDA_ARCHITECTURES=89
+    make -j$(nproc)
+  '
