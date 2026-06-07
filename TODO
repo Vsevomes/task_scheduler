@@ -2,12 +2,14 @@
 
 ## Core execution model
 
-- Remove StarPU-only comparison modes from the main benchmark matrix:
-  - remove `starpu_cpu`;
-  - remove `starpu_gpu`;
-  - keep only `native_cpu`, `native_gpu`, `starpu_hybrid`.
-- StarPU should be evaluated as a heterogeneous scheduler, not as a wrapper around CPU-only/GPU-only execution.
-- Update `ExecutionMode`, CLI help, README, scripts, and experiment matrix accordingly.
+Status: done.
+
+- Removed StarPU-only comparison modes from the main benchmark matrix:
+  - removed `starpu_cpu`;
+  - removed `starpu_gpu`;
+  - kept only `native_cpu`, `native_gpu`, `starpu_hybrid`.
+- StarPU is now represented as a heterogeneous scheduler mode, not as a wrapper around CPU-only/GPU-only execution.
+- Updated `ExecutionMode`, CLI help, README, scripts, and experiment matrix accordingly.
 
 ## Native baselines
 

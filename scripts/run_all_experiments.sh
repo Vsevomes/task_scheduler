@@ -4,8 +4,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN="$ROOT/scripts/run_experiment.sh"
 
-MODES=(native_cpu native_gpu starpu_cpu starpu_gpu starpu_hybrid)
-STARPU_MODES=(starpu_cpu starpu_gpu starpu_hybrid)
+MODES=(native_cpu native_gpu starpu_hybrid)
+STARPU_MODES=(starpu_hybrid)
 MATMUL_SIZES=(512 1024 2048)
 IMAGE_SIZES=("640 480" "1280 720")
 TASK_COUNTS=(100 1000)

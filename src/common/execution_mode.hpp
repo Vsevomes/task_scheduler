@@ -6,8 +6,6 @@
 enum class ExecutionMode {
   NativeCpu,
   NativeGpu,
-  StarpuCpu,
-  StarpuGpu,
   StarpuHybrid,
 };
 
@@ -18,10 +16,6 @@ inline ExecutionMode parse_execution_mode(const char *value)
     return ExecutionMode::NativeCpu;
   if (mode == "native_gpu")
     return ExecutionMode::NativeGpu;
-  if (mode == "starpu_cpu")
-    return ExecutionMode::StarpuCpu;
-  if (mode == "starpu_gpu")
-    return ExecutionMode::StarpuGpu;
   if (mode == "starpu_hybrid")
     return ExecutionMode::StarpuHybrid;
   std::abort();
@@ -34,10 +28,6 @@ inline const char *execution_mode_name(ExecutionMode mode)
     return "native_cpu";
   case ExecutionMode::NativeGpu:
     return "native_gpu";
-  case ExecutionMode::StarpuCpu:
-    return "starpu_cpu";
-  case ExecutionMode::StarpuGpu:
-    return "starpu_gpu";
   case ExecutionMode::StarpuHybrid:
     return "starpu_hybrid";
   }
@@ -46,8 +36,7 @@ inline const char *execution_mode_name(ExecutionMode mode)
 
 inline bool uses_starpu(ExecutionMode mode)
 {
-  return mode == ExecutionMode::StarpuCpu || mode == ExecutionMode::StarpuGpu ||
-         mode == ExecutionMode::StarpuHybrid;
+  return mode == ExecutionMode::StarpuHybrid;
 }
 
 inline ExecutionMode execution_mode_from_env()

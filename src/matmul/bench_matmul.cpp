@@ -88,7 +88,7 @@ static void print_usage(const char *prog)
 {
   std::fprintf(stderr,
                "Usage: %s --mode MODE --size N [--output PATH]\n"
-               "Modes: native_cpu native_gpu starpu_cpu starpu_gpu starpu_hybrid\n",
+               "Modes: native_cpu native_gpu starpu_hybrid\n",
                prog);
 }
 

@@ -33,7 +33,7 @@ static struct starpu_codelet add_one_cl = {
 static void print_usage(const char *prog)
 {
   std::fprintf(stderr, "Usage: %s [--mode MODE] [--size N] [--output PATH]\n", prog);
-  std::fprintf(stderr, "Modes: starpu_cpu, starpu_gpu, starpu_hybrid\n");
+  std::fprintf(stderr, "Modes: starpu_hybrid\n");
 }
 
 int main(int argc, char **argv)

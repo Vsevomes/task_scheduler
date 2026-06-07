@@ -37,19 +37,17 @@ USE_GPU=1 ./starpu-rtx4060-build
 
 | Binary | Scenario | Modes |
 |--------|----------|-------|
-| `hello_starpu` | StarPU sanity check | starpu_cpu, starpu_gpu, starpu_hybrid |
-| `bench_matmul` | Matrix multiplication | all 5 modes |
-| `bench_independent` | N identical matvec tasks | starpu_* |
-| `bench_heterogeneous` | Mixed light/heavy tasks | starpu_* |
-| `bench_image` | Grayscale / blur / threshold | all 5 modes |
-| `bench_overhead` | Empty & memcpy StarPU tasks | starpu_* |
+| `hello_starpu` | StarPU sanity check | starpu_hybrid |
+| `bench_matmul` | Matrix multiplication | native_cpu, native_gpu, starpu_hybrid |
+| `bench_independent` | N identical matvec tasks | starpu_hybrid |
+| `bench_heterogeneous` | Mixed light/heavy tasks | starpu_hybrid |
+| `bench_image` | Grayscale / blur / threshold | native_cpu, native_gpu, starpu_hybrid |
+| `bench_overhead` | Empty & memcpy StarPU tasks | starpu_hybrid |
 
 ### Execution modes
 
 - `native_cpu` — OpenBLAS, no StarPU
 - `native_gpu` — cuBLAS, no StarPU
-- `starpu_cpu` — StarPU, CPU workers only (`STARPU_NCUDA=0`)
-- `starpu_gpu` — StarPU, GPU workers only (`STARPU_NCPU=0`)
 - `starpu_hybrid` — StarPU dynamic scheduling
 
 ## Results
