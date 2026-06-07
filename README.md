@@ -41,6 +41,12 @@ USE_GPU=1 ./starpu-rtx4060-build
 
 StarPU-only CPU/GPU wrapper modes are intentionally excluded from the main matrix. StarPU is evaluated as a heterogeneous scheduler.
 
+`starpu_hybrid` uses `dmda` by default. Override it with `STARPU_SCHED`, for example:
+
+```bash
+STARPU_SCHED=lws ./scripts/run_experiment.sh heterogeneous --mode starpu_hybrid
+```
+
 ## Benchmarks
 
 | Binary | Scenario | Modes |
@@ -71,6 +77,8 @@ The task count and block size are varied to study scheduler behavior under diffe
 
 The scenario submits light, medium, and heavy array-processing tasks together. Task classes differ by input size and arithmetic intensity, creating uneven load for dynamic scheduling.
 
+Tasks are shuffled before submission, so StarPU sees a mixed stream instead of a light-then-medium-then-heavy batch.
+
 ### Image Scenario
 
 Operations:
@@ -82,6 +90,17 @@ Operations:
 - `filter`
 
 StarPU image execution uses tiles. Blur/convolution borders are handled per tile with simplified no-halo borders; this policy is recorded in JSON.
+
+Use `--mixed-ops` to turn image into a mixed tile stream where each tile cycles through a different operation. The full experiment matrix enables this mode for image runs.
+
+## Scheduler Comparison
+
+```bash
+./scripts/run_scheduler_comparison.sh heterogeneous
+./scripts/run_scheduler_comparison.sh image
+```
+
+The script compares `lws`, `dmda`, and `dmdas` on the same `starpu_hybrid` workload.
 
 ## Results
 

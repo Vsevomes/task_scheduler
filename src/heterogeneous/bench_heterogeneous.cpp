@@ -6,6 +6,7 @@
 #include "starpu_runtime.hpp"
 #include "timer.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -50,12 +51,18 @@ static void cpu_hetero(void *buffers[], void *cl_arg)
   run_cpu_task(input, output, args->n, args->kind);
 }
 
+static struct starpu_perfmodel hetero_perfmodel = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "heterogeneous_array",
+};
+
 static struct starpu_codelet hetero_cl = {
     .where = STARPU_CPU | STARPU_CUDA,
     .cpu_funcs = {cpu_hetero},
     .cuda_funcs = {cuda_hetero_codelet},
     .nbuffers = 2,
     .modes = {STARPU_R, STARPU_W},
+    .model = &hetero_perfmodel,
     .name = "heterogeneous_array",
 };
 
@@ -71,12 +78,12 @@ static void print_usage(const char *prog)
 int main(int argc, char **argv)
 {
   ExecutionMode mode = ExecutionMode::StarpuHybrid;
-  unsigned task_count = 300;
+  unsigned task_count = 900;
   double light_ratio = 0.5;
   double medium_ratio = 0.3;
-  std::size_t light_n = 2048;
-  std::size_t medium_n = 8192;
-  std::size_t heavy_n = 32768;
+  std::size_t light_n = 1024;
+  std::size_t medium_n = 4096;
+  std::size_t heavy_n = 16384;
   std::string output_path;
 
   for (int i = 1; i < argc; ++i) {
@@ -122,14 +129,18 @@ int main(int argc, char **argv)
   std::vector<std::size_t> offsets(task_count);
   std::vector<std::size_t> sizes(task_count);
   std::vector<int> kinds(task_count);
+  std::vector<HeteroTaskKind> task_kinds;
+  task_kinds.reserve(task_count);
+  task_kinds.insert(task_kinds.end(), light_tasks, HeteroTaskKind::Light);
+  task_kinds.insert(task_kinds.end(), medium_tasks, HeteroTaskKind::Medium);
+  task_kinds.insert(task_kinds.end(), heavy_tasks, HeteroTaskKind::Heavy);
+
+  std::mt19937 rng(11);
+  std::shuffle(task_kinds.begin(), task_kinds.end(), rng);
 
   std::size_t total_elements = 0;
   for (unsigned t = 0; t < task_count; ++t) {
-    HeteroTaskKind kind = HeteroTaskKind::Heavy;
-    if (t < light_tasks)
-      kind = HeteroTaskKind::Light;
-    else if (t < light_tasks + medium_tasks)
-      kind = HeteroTaskKind::Medium;
+    const HeteroTaskKind kind = task_kinds[t];
 
     const std::size_t n =
         kind == HeteroTaskKind::Light ? light_n : (kind == HeteroTaskKind::Medium ? medium_n : heavy_n);
@@ -142,7 +153,6 @@ int main(int argc, char **argv)
 
   std::vector<double> input(total_elements);
   std::vector<double> output(total_elements);
-  std::mt19937 rng(11);
   std::uniform_real_distribution<double> dist(0.0, 10.0);
   for (auto &v : input)
     v = dist(rng);
@@ -219,6 +229,8 @@ int main(int argc, char **argv)
   writer.set_metric("medium_tasks", static_cast<double>(medium_tasks));
   writer.set_metric("heavy_tasks", static_cast<double>(heavy_tasks));
   if (uses_starpu(mode)) {
+    const char *sched = std::getenv("STARPU_SCHED");
+    writer.set_param("starpu_sched", (sched != nullptr && sched[0] != '\0') ? sched : "dmda");
     writer.set_metric("starpu_init_ms", starpu_timings.init_ms);
     writer.set_metric("starpu_data_registration_ms", starpu_timings.data_registration_ms);
     writer.set_metric("starpu_task_submission_ms", starpu_timings.task_submission_ms);

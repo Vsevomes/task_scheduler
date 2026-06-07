@@ -61,12 +61,18 @@ static void cpu_matmul_tile(void *buffers[], void *cl_arg)
   }
 }
 
+static struct starpu_perfmodel matmul_tile_perfmodel = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "matmul_tile",
+};
+
 static struct starpu_codelet matmul_tile_cl = {
     .where = STARPU_CPU | STARPU_CUDA,
     .cpu_funcs = {cpu_matmul_tile},
     .cuda_funcs = {cuda_matmul_tile_codelet},
     .nbuffers = 3,
     .modes = {STARPU_R, STARPU_R, STARPU_W},
+    .model = &matmul_tile_perfmodel,
     .name = "matmul_tile",
 };
 
@@ -214,6 +220,8 @@ int main(int argc, char **argv)
   writer.set_metric("task_count", static_cast<double>(task_count));
   writer.set_metric("gflops", (2.0 * n * n * n) / (total_ms * 1e6));
   if (uses_starpu(mode)) {
+    const char *sched = std::getenv("STARPU_SCHED");
+    writer.set_param("starpu_sched", (sched != nullptr && sched[0] != '\0') ? sched : "dmda");
     writer.set_metric("starpu_init_ms", starpu_timings.init_ms);
     writer.set_metric("starpu_data_registration_ms", starpu_timings.data_registration_ms);
     writer.set_metric("starpu_task_submission_ms", starpu_timings.task_submission_ms);

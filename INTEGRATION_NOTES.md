@@ -30,14 +30,16 @@ The final matrix uses three modes:
 
 StarPU-only CPU/GPU modes are excluded because they evaluate StarPU as a wrapper rather than as a heterogeneous scheduler.
 
+`dmda` is the default StarPU scheduler because it can use history-based performance models and data movement estimates. `STARPU_SCHED` can override it for scheduler comparison runs.
+
 ## Scenario Notes
 
 | Scenario | Native paths | StarPU path | Main limitation |
 |----------|--------------|-------------|-----------------|
 | matmul | scalar CPU loop + simple CUDA kernel | independent output-tile tasks | simple kernels are intentionally not BLAS/cuBLAS-optimized |
 | independent | linear array loop + flat CUDA kernel | one task per array block | synthetic arithmetic workload |
-| heterogeneous | sequential class-based CPU loop + CUDA task grid | mixed light/medium/heavy tasks submitted together | task classes are synthetic but isolate scheduler behavior |
-| image | whole-image CPU/GPU functions | one task per image tile | convolution borders use simplified per-tile no-halo handling |
+| heterogeneous | sequential class-based CPU loop + CUDA task grid | shuffled light/medium/heavy task stream | task classes are synthetic but isolate scheduler behavior |
+| image | tiled CPU/GPU functions | one task per image tile, optionally mixed operations | convolution borders use simplified per-tile no-halo handling |
 | overhead | none | noop/memcpy microbenchmarks | auxiliary only, not a replacement for per-scenario overhead analysis |
 
 ## Integration Complexity
@@ -48,6 +50,7 @@ StarPU adds complexity mostly through:
 - `starpu_task` creation and lifetime;
 - stable `cl_arg` storage until task completion;
 - separate CUDA compilation units for kernels used by codelets;
+- using `starpu_cuda_get_local_stream()` in CUDA codelets instead of globally synchronizing the GPU;
 - interpreting traces and separating scheduling time from compute/data movement.
 
 The native paths are intentionally plain so the comparison focuses on scheduling and data movement rather than tuned library performance.

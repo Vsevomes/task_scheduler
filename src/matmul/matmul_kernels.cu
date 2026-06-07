@@ -3,6 +3,7 @@
 
 #include <cuda_runtime.h>
 #include <starpu.h>
+#include <starpu_cuda.h>
 
 __global__ void matmul_kernel(const double *a, const double *b, double *c, std::size_t n)
 {
@@ -67,6 +68,7 @@ extern "C" void cuda_matmul_tile_codelet(void *buffers[], void *cl_arg)
   const dim3 threads(16, 16);
   const dim3 blocks(static_cast<unsigned>((args->tile_cols + threads.x - 1) / threads.x),
                     static_cast<unsigned>((args->tile_rows + threads.y - 1) / threads.y));
-  matmul_tile_kernel<<<blocks, threads>>>(a, b, tile, *args);
-  cudaDeviceSynchronize();
+  cudaStream_t stream = starpu_cuda_get_local_stream();
+  matmul_tile_kernel<<<blocks, threads, 0, stream>>>(a, b, tile, *args);
+  cudaStreamSynchronize(stream);
 }

@@ -39,12 +39,18 @@ static void cpu_independent(void *buffers[], void *cl_arg)
     output[i] = independent_op(input[i]);
 }
 
+static struct starpu_perfmodel independent_perfmodel = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "independent_array",
+};
+
 static struct starpu_codelet independent_cl = {
     .where = STARPU_CPU | STARPU_CUDA,
     .cpu_funcs = {cpu_independent},
     .cuda_funcs = {cuda_independent_codelet},
     .nbuffers = 2,
     .modes = {STARPU_R, STARPU_W},
+    .model = &independent_perfmodel,
     .name = "independent_array",
 };
 
@@ -165,6 +171,8 @@ int main(int argc, char **argv)
   writer.set_metric("task_count", static_cast<double>(task_count));
   writer.set_metric("avg_task_ms", total_ms / task_count);
   if (uses_starpu(mode)) {
+    const char *sched = std::getenv("STARPU_SCHED");
+    writer.set_param("starpu_sched", (sched != nullptr && sched[0] != '\0') ? sched : "dmda");
     writer.set_metric("starpu_init_ms", starpu_timings.init_ms);
     writer.set_metric("starpu_data_registration_ms", starpu_timings.data_registration_ms);
     writer.set_metric("starpu_task_submission_ms", starpu_timings.task_submission_ms);

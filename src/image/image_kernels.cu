@@ -3,6 +3,7 @@
 
 #include <cuda_runtime.h>
 #include <starpu.h>
+#include <starpu_cuda.h>
 
 __device__ static inline std::uint8_t clamp_u8(int value)
 {
@@ -89,13 +90,14 @@ extern "C" void cuda_image_tile_codelet(void *buffers[], void *cl_arg)
   std::uint8_t *tile = starpu_vector_ptr<std::uint8_t>(buffers[0]);
   std::uint8_t *scratch = nullptr;
   const std::size_t bytes = static_cast<std::size_t>(args->width) * args->height * 3;
+  cudaStream_t stream = starpu_cuda_get_local_stream();
   cudaMalloc(&scratch, bytes);
-  cudaMemcpy(scratch, tile, bytes, cudaMemcpyDeviceToDevice);
+  cudaMemcpyAsync(scratch, tile, bytes, cudaMemcpyDeviceToDevice, stream);
 
   const dim3 threads(16, 16);
   const dim3 blocks((args->width + threads.x - 1) / threads.x,
                     (args->height + threads.y - 1) / threads.y);
-  image_kernel<<<blocks, threads>>>(scratch, tile, args->width, args->height, args->op);
-  cudaDeviceSynchronize();
+  image_kernel<<<blocks, threads, 0, stream>>>(scratch, tile, args->width, args->height, args->op);
+  cudaStreamSynchronize(stream);
   cudaFree(scratch);
 }

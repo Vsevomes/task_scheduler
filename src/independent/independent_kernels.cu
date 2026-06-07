@@ -4,6 +4,7 @@
 #include <cuda_runtime.h>
 #include <math.h>
 #include <starpu.h>
+#include <starpu_cuda.h>
 
 __device__ __host__ static inline double independent_op(double x)
 {
@@ -45,6 +46,7 @@ extern "C" void cuda_independent_codelet(void *buffers[], void *cl_arg)
 
   const unsigned threads = 256;
   const unsigned blocks = static_cast<unsigned>((args->n + threads - 1) / threads);
-  independent_kernel<<<blocks, threads>>>(input, output, args->n);
-  cudaDeviceSynchronize();
+  cudaStream_t stream = starpu_cuda_get_local_stream();
+  independent_kernel<<<blocks, threads, 0, stream>>>(input, output, args->n);
+  cudaStreamSynchronize(stream);
 }

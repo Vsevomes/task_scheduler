@@ -26,7 +26,7 @@ done
 
 echo "=== heterogeneous ==="
 for mode in "${MODES[@]}"; do
-  "$RUN" heterogeneous --mode "$mode" --tasks 300 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 8192 --heavy-size 32768
+  "$RUN" heterogeneous --mode "$mode" --tasks 900 --light-ratio 0.5 --medium-ratio 0.3 --light-size 1024 --medium-size 4096 --heavy-size 16384
 done
 
 echo "=== image ==="
@@ -34,7 +34,7 @@ for mode in "${MODES[@]}"; do
   for dims in "${IMAGE_SIZES[@]}"; do
     read -r w h <<<"$dims"
     for op in grayscale blur edge convolution filter; do
-      "$RUN" image --mode "$mode" --width "$w" --height "$h" --op "$op" --tile-size 64
+      "$RUN" image --mode "$mode" --width "$w" --height "$h" --op "$op" --tile-size 64 --mixed-ops
     done
   done
 done

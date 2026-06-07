@@ -32,7 +32,7 @@ if [[ ! -x "$EXEC" ]]; then
 fi
 
 METRICS_FILE="$ROOT/results/system_${SCENARIO}_$(date +%Y%m%d_%H%M%S).csv"
-"$ROOT/scripts/collect_metrics.sh" 1 "$METRICS_FILE" &
+METRICS_SAMPLE_SEC=0.25 "$ROOT/scripts/collect_metrics.sh" 0.5 "$METRICS_FILE" &
 SAMPLER_PID=$!
 
 cleanup() {
@@ -47,4 +47,11 @@ export SYSTEM_METRICS_FILE="$METRICS_FILE"
 
 echo "Running $BIN with args: $*"
 echo "System metrics -> $METRICS_FILE"
-"$EXEC" "$@"
+BENCH_LOG="$(mktemp)"
+trap 'kill "$SAMPLER_PID" 2>/dev/null || true; rm -f "$BENCH_LOG"' EXIT
+"$EXEC" "$@" 2>&1 | tee "$BENCH_LOG"
+JSON_PATH="$(grep -oE 'results/[^ ]+\.json' "$BENCH_LOG" | tail -1 || true)"
+if [[ -n "$JSON_PATH" && ! "$JSON_PATH" = /* ]]; then
+  JSON_PATH="$ROOT/$JSON_PATH"
+fi
+"$ROOT/scripts/summarize_metrics.sh" "$METRICS_FILE" "${JSON_PATH:-}"
