@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #include <iomanip>
 #include <sstream>
@@ -30,6 +31,9 @@ void MetricsWriter::write_json(const std::string &path) const
   if (file == nullptr)
     return;
 
+  const char *system_metrics_csv = std::getenv("SYSTEM_METRICS_FILE");
+  const char *starpu_trace_prefix = std::getenv("STARPU_FXT_PREFIX");
+
   std::fprintf(file, "{\n");
   std::fprintf(file, "  \"scenario\": \"%s\",\n", scenario_.c_str());
   std::fprintf(file, "  \"mode\": \"%s\",\n", mode_.c_str());
@@ -48,7 +52,15 @@ void MetricsWriter::write_json(const std::string &path) const
     std::fprintf(file, "    \"%s\": %.6f%s\n", key.c_str(), value,
                  ++mi < metrics_.size() ? "," : "");
   }
-  std::fprintf(file, "  }\n");
+  std::fprintf(file, "  },\n");
+  if (system_metrics_csv != nullptr)
+    std::fprintf(file, "  \"system_metrics_csv\": \"%s\",\n", system_metrics_csv);
+  else
+    std::fprintf(file, "  \"system_metrics_csv\": null,\n");
+  if (starpu_trace_prefix != nullptr)
+    std::fprintf(file, "  \"starpu_trace_prefix\": \"%s\"\n", starpu_trace_prefix);
+  else
+    std::fprintf(file, "  \"starpu_trace_prefix\": null\n");
   std::fprintf(file, "}\n");
   std::fclose(file);
 }

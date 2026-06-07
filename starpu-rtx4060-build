@@ -29,5 +29,5 @@ docker run --rm "${GPU_ARGS[@]}" \
     cmake --build . -j"$(nproc)"
     echo ""
     echo "Build complete. Binaries in build/"
-    ls -1 bench_* hello_starpu 2>/dev/null || true
+    ls -1 bench_* 2>/dev/null || true
   '

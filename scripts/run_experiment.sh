@@ -9,12 +9,11 @@ shift || true
 
 if [[ -z "$SCENARIO" ]]; then
   echo "Usage: $0 SCENARIO [--mode MODE] [benchmark args...]"
-  echo "Scenarios: hello matmul independent heterogeneous image overhead"
+  echo "Scenarios: matmul independent heterogeneous image overhead"
   exit 1
-}
+fi
 
 case "$SCENARIO" in
-  hello) BIN=hello_starpu ;;
   matmul) BIN=bench_matmul ;;
   independent) BIN=bench_independent ;;
   heterogeneous) BIN=bench_heterogeneous ;;
@@ -44,6 +43,7 @@ trap cleanup EXIT
 cd "$ROOT"
 export STARPU_PROF="${STARPU_PROF:-1}"
 export STARPU_FXT_PREFIX="${STARPU_FXT_PREFIX:-results/trace_${SCENARIO}_}"
+export SYSTEM_METRICS_FILE="$METRICS_FILE"
 
 echo "Running $BIN with args: $*"
 echo "System metrics -> $METRICS_FILE"

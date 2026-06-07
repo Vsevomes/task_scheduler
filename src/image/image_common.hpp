@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-enum class ImageOp { Grayscale, Blur, Threshold };
+enum class ImageOp { Grayscale, Blur, Edge, Convolution, Filter };
 
 struct ImageArgs {
   unsigned width;

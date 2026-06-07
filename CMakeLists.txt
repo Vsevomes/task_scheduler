@@ -17,7 +17,6 @@ if(NOT STARPU_FOUND)
 endif()
 
 find_package(CUDAToolkit REQUIRED)
-find_package(BLAS REQUIRED)
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/src
@@ -27,14 +26,11 @@ include_directories(
 set(COMMON_SOURCES
   src/common/metrics.cpp
   src/common/starpu_runtime.cpp
-  src/common/starpu_cublas_helper.cpp
 )
 
 set(COMMON_LIBS
   ${STARPU_LIBRARIES}
   CUDA::cudart
-  CUDA::cublas
-  ${BLAS_LIBRARIES}
 )
 
 function(add_benchmark target)
@@ -45,11 +41,6 @@ function(add_benchmark target)
   target_compile_options(${target} PRIVATE ${STARPU_CFLAGS})
   target_compile_definitions(${target} PRIVATE STARPU_USE_CUDA)
 endfunction()
-
-add_benchmark(hello_starpu
-  src/hello/hello_starpu.cpp
-  src/hello/hello_kernels.cu
-)
 
 add_benchmark(bench_matmul
   src/matmul/bench_matmul.cpp

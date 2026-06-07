@@ -10,36 +10,31 @@ MATMUL_SIZES=(512 1024 2048)
 IMAGE_SIZES=("640 480" "1280 720")
 TASK_COUNTS=(100 1000)
 
-echo "=== hello ==="
-for mode in "${STARPU_MODES[@]}"; do
-  "$RUN" hello --mode "$mode" --size 1048576
-done
-
 echo "=== matmul ==="
 for mode in "${MODES[@]}"; do
   for size in "${MATMUL_SIZES[@]}"; do
-    "$RUN" matmul --mode "$mode" --size "$size"
+    "$RUN" matmul --mode "$mode" --size "$size" --tile-size 256
   done
 done
 
 echo "=== independent ==="
-for mode in "${STARPU_MODES[@]}"; do
+for mode in "${MODES[@]}"; do
   for tasks in "${TASK_COUNTS[@]}"; do
-    "$RUN" independent --mode "$mode" --tasks "$tasks" --size 256
+    "$RUN" independent --mode "$mode" --tasks "$tasks" --size 4096
   done
 done
 
 echo "=== heterogeneous ==="
-for mode in "${STARPU_MODES[@]}"; do
-  "$RUN" heterogeneous --mode "$mode" --tasks 100 --light-ratio 0.7 --light-size 256 --heavy-size 384
+for mode in "${MODES[@]}"; do
+  "$RUN" heterogeneous --mode "$mode" --tasks 300 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 8192 --heavy-size 32768
 done
 
 echo "=== image ==="
 for mode in "${MODES[@]}"; do
   for dims in "${IMAGE_SIZES[@]}"; do
     read -r w h <<<"$dims"
-    for op in grayscale blur threshold; do
-      "$RUN" image --mode "$mode" --width "$w" --height "$h" --op "$op"
+    for op in grayscale blur edge convolution filter; do
+      "$RUN" image --mode "$mode" --width "$w" --height "$h" --op "$op" --tile-size 64
     done
   done
 done

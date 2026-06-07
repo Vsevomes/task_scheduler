@@ -1,125 +1,119 @@
 # TODO: bring benchmarks in line with the research spec
 
-## Core execution model
-
 Status: done.
+
+## Core execution model
 
 - Removed StarPU-only comparison modes from the main benchmark matrix:
   - removed `starpu_cpu`;
   - removed `starpu_gpu`;
   - kept only `native_cpu`, `native_gpu`, `starpu_hybrid`.
-- StarPU is now represented as a heterogeneous scheduler mode, not as a wrapper around CPU-only/GPU-only execution.
-- Updated `ExecutionMode`, CLI help, README, scripts, and experiment matrix accordingly.
+- StarPU is evaluated as a heterogeneous scheduler, not as a wrapper around CPU-only/GPU-only execution.
+- Updated `ExecutionMode`, CLI help, README, scripts, and experiment matrix.
 
 ## Native baselines
 
-- Add `native_cpu` and `native_gpu` implementations for every main scenario:
+- Added `native_cpu` and `native_gpu` implementations for every main scenario:
   - `matmul`;
   - `independent`;
   - `heterogeneous`;
   - `image`.
-- Native CPU implementations should be simple and understandable, preferably scalar/linear loops where possible.
-- Native GPU implementations should use straightforward CUDA kernels with simple data parallelism.
-- Avoid highly optimized native baselines that make the comparison about library tuning instead of scheduling.
+- Replaced BLAS/cuBLAS baselines with simple scalar CPU loops and straightforward CUDA kernels.
+- Kept native baselines intentionally simple so the comparison focuses on scheduling rather than tuned library performance.
 
 ## Matrix multiplication
 
-- Replace the current monolithic StarPU matmul task with a blocked/tiled implementation.
-- Submit many independent block tasks so StarPU can actually distribute work between CPU and GPU.
-- Use matrix sizes from the plan:
+- Replaced the monolithic StarPU matmul task with a tiled implementation.
+- StarPU now submits independent output-tile tasks.
+- Default matrix sizes in `scripts/run_all_experiments.sh`:
   - 512x512;
   - 1024x1024;
-  - 2048x2048;
-  - optionally larger sizes if memory and runtime allow.
-- Consider whether to replace BLAS/cuBLAS with simpler CPU/GPU kernels for methodological consistency.
-- Record tile size and number of submitted tasks in JSON metrics.
+  - 2048x2048.
+- JSON metrics record tile size and submitted task count.
 
 ## Independent tasks
 
-- Replace the current matvec-based workload with a simpler independent array-processing workload, for example:
+- Replaced the matvec workload with independent array processing:
   `y[i] = sin(x[i]) + sqrt(x[i]) + x[i]^2`.
-- Each task should process a separate block/array and be independent from all other tasks.
-- Add all three main modes:
-  - native CPU sequential or simple threaded baseline if explicitly needed;
-  - native GPU simple kernel over all blocks;
-  - StarPU hybrid with one task per block.
-- Vary task count to study scheduler behavior under different parallelism levels.
-- Record task count, block size, total elements, and average task time.
+- Each StarPU task processes a separate block.
+- Added all three main modes:
+  - native CPU;
+  - native GPU;
+  - StarPU hybrid.
+- The experiment matrix varies task count.
+- JSON metrics record task count, block size, total elements, and average task time.
 
 ## Heterogeneous workload
 
-- Redesign the scenario around multiple task classes:
-  - light tasks: small array processing;
-  - medium tasks: medium array processing or small matrix operation;
-  - heavy tasks: larger array processing or larger matrix operation.
-- Add native CPU and native GPU baselines.
-- Keep StarPU hybrid as the only StarPU mode.
-- Submit tasks simultaneously to create uneven load and test dynamic balancing.
-- Record counts per task class, sizes per class, and aggregate runtime.
+- Redesigned the scenario around three task classes:
+  - light array tasks;
+  - medium array tasks;
+  - heavy array tasks.
+- Added native CPU and native GPU baselines.
+- Kept StarPU hybrid as the only StarPU mode.
+- StarPU submits mixed task classes together to create uneven load.
+- JSON metrics record counts per task class, sizes per class, total elements, and aggregate runtime.
 
 ## Image / edge-oriented scenario
 
-- Keep image tiling, because it matches the edge-oriented scenario well.
-- Replace or extend operations to match the plan:
+- Kept image tiling for StarPU.
+- Added operations:
+  - grayscale;
   - blur;
   - edge detection;
   - convolution;
   - filtering.
-- Fix current GPU blur behavior: it currently falls back to grayscale and is not a real blur.
-- Fix native CPU image path so it uses a normal CPU function, not a StarPU buffer accessor.
-- For convolution/blur on tiles, handle borders/halo regions correctly or explicitly document simplified borders.
-- Add native CPU and native GPU paths for all selected operations.
-- Record image size, tile size, operation, tile count, and possibly number of images if batch processing is added.
+- Fixed GPU blur so it performs a real 3x3 blur instead of falling back to grayscale.
+- Fixed native CPU image path so it uses a normal CPU function.
+- Documented simplified per-tile no-halo border handling in JSON metadata.
+- Added native CPU and native GPU paths for all selected operations.
+- JSON metrics record image size, tile size, operation, tile count, and border policy.
 
 ## Metrics and output files
 
-- Every benchmark run must write a machine-readable result file.
-- JSON result files should include:
+- Every benchmark writes a machine-readable JSON result file.
+- JSON result files include:
   - scenario;
   - mode;
   - input parameters;
   - total runtime;
-  - task count;
-  - block/tile size;
-  - StarPU-specific overhead fields when applicable;
+  - task count where applicable;
+  - block/tile size where applicable;
+  - StarPU overhead breakdown fields where applicable;
   - path to system metrics CSV;
-  - path/prefix to StarPU trace files when profiling is enabled.
-- System metrics CSV should be linked to the benchmark JSON through a shared run id or explicit file path.
-- Update `run_experiment.sh` so it passes or records the metrics CSV path in the result metadata.
+  - StarPU trace prefix.
+- `run_experiment.sh` exports the system metrics CSV path so benchmarks link it in result metadata.
 
 ## StarPU overhead
 
-- Reconsider the standalone `bench_overhead` scenario.
-- The current noop/memcpy benchmark is useful as a microbenchmark for task submission and data movement overhead.
-- It is not fully representative of overhead inside real workloads, because real scenarios include computation, tiling, data dependencies, and CPU/GPU scheduling decisions.
-- Prefer measuring overhead inside each main test case:
-  - native total time vs StarPU hybrid total time for comparable work;
+- Kept `bench_overhead` as an auxiliary noop/memcpy microbenchmark.
+- Added per-scenario StarPU timing fields where applicable:
   - StarPU initialization time;
   - data registration time;
   - task submission time;
   - wait/synchronization time;
   - data unregister/copy-back time.
-- Keep `bench_overhead` only as an auxiliary microbenchmark, not as a replacement for per-scenario overhead analysis.
+- Real workload comparisons should use native total time vs StarPU hybrid total time plus the per-scenario StarPU breakdown.
 
 ## Remove unused benchmark
 
-- Remove `hello_starpu`.
-- Delete it from:
+- Removed `hello_starpu`.
+- Deleted it from:
   - CMake target list;
   - README;
   - run scripts;
-  - experiment matrix.
-- It is useful only as a sanity check and does not contribute to the research evaluation.
+  - experiment matrix;
+  - source tree.
 
 ## Documentation
 
-- Rewrite README around the final three modes:
+- Rewrote README around the final three modes:
   - `native_cpu`;
   - `native_gpu`;
   - `starpu_hybrid`.
-- Update integration notes so they distinguish:
+- Updated integration notes to distinguish:
   - implementation complexity;
   - scheduling overhead;
   - data movement overhead;
   - limitations of each scenario.
-- Document any hardware/platform deviations separately from benchmark methodology.
+- Documented hardware/platform deviation separately from benchmark methodology.

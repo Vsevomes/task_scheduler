@@ -10,14 +10,11 @@ sudo apt-get install -y \
   build-essential \
   cmake \
   pkg-config \
-  libopenblas-dev \
   libhwloc-dev \
   libstarpu-contrib-dev \
   cuda-nvcc-12-4 \
   cuda-cudart-dev-12-4 \
   cuda-nvml-dev-12-4 \
-  libcublas-dev-12-4 \
-  libcusparse-dev-12-4 \
   sysstat
 
 export PATH="/usr/local/cuda/bin:${PATH}"
@@ -37,4 +34,4 @@ cmake --build . -j"$(nproc)"
 
 echo ""
 echo "Build complete:"
-ls -1 "$ROOT/build"/bench_* "$ROOT/build"/hello_starpu 2>/dev/null
+ls -1 "$ROOT/build"/bench_* 2>/dev/null

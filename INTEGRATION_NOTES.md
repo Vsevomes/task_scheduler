@@ -2,79 +2,76 @@
 
 Qualitative assessment of StarPU integration complexity for the research thesis.
 
-## Platform deviation from spec
+## Platform Deviation From Spec
 
-The thesis specifies CUDA 10.2. RTX 4060 (Ada Lovelace, sm_89) requires CUDA ≥ 11.8.
-We use **CUDA 12.4** as the sole target. This is documented in the report as a hardware constraint, not a design choice.
+The thesis specifies CUDA 10.2. RTX 4060 (Ada Lovelace, sm_89) requires CUDA >= 11.8.
+Experiments use **CUDA 12.4** as a hardware constraint, not as a methodology change.
 
-HIP/AMD paths from the spec are out of scope (NVIDIA-only platform).
+HIP/AMD paths from the spec are out of scope for this NVIDIA-only platform.
 
-## Build environment
+## Build Environment
 
 | Aspect | Difficulty | Notes |
 |--------|------------|-------|
-| StarPU from source in Docker | Medium | ~20 min first build; Dockerfile handles deps |
-| CMake + pkg-config | Low | `pkg-config starpu-1.4` after install |
+| Docker StarPU/CUDA build | Medium | Dockerfile handles StarPU and CUDA dependencies |
+| CMake + pkg-config | Low | Uses `starpu-1.4`, falling back to `starpu-1.3` |
 | CUDA arch sm_89 | Low | `-DCMAKE_CUDA_ARCHITECTURES=89` |
-| Native host build | High | `setup_rtx4060.sh` installs runtime only, not dev headers |
+| Native host build | High | Requires matching CUDA dev packages and StarPU contrib |
 
 **Recommendation:** use Docker as the primary build path.
 
-## Code structure per scenario
+## Methodology Shape
 
-Each scenario follows the same pattern:
+The final matrix uses three modes:
 
-1. **Native CPU** — direct call to OpenBLAS or hand-written loops
-2. **Native GPU** — cuBLAS or CUDA kernels via `cudaMalloc`/`cublas*`
-3. **StarPU** — `starpu_codelet` with `.cpu_funcs` + `.cuda_funcs`, data handles, `starpu_task_submit`
+1. **Native CPU** — simple scalar CPU loops, no StarPU.
+2. **Native GPU** — straightforward CUDA kernels, no StarPU.
+3. **StarPU hybrid** — one StarPU codelet with CPU and CUDA implementations, data handles, and many submitted tasks where the scenario supports tiling/blocking.
 
-### Lines of code (approximate, excluding common/)
+StarPU-only CPU/GPU modes are excluded because they evaluate StarPU as a wrapper rather than as a heterogeneous scheduler.
 
-| Scenario | Native paths | StarPU path | Codelets |
-|----------|-------------|-------------|----------|
-| matmul | ~40 lines | ~50 lines | 1 (CPU+cuda) |
-| independent | — | ~80 lines | 1 |
-| heterogeneous | — | ~120 lines | 1 (dual logic) |
-| image | ~60 lines CPU + ~40 GPU | ~80 lines | 1 (tiled) |
-| overhead | — | ~60 lines | 2 (noop, memcpy) |
+## Scenario Notes
 
-StarPU adds roughly **1.5–2×** code volume vs native for equivalent compute, mostly boilerplate (handles, task creation, init/shutdown).
+| Scenario | Native paths | StarPU path | Main limitation |
+|----------|--------------|-------------|-----------------|
+| matmul | scalar CPU loop + simple CUDA kernel | independent output-tile tasks | simple kernels are intentionally not BLAS/cuBLAS-optimized |
+| independent | linear array loop + flat CUDA kernel | one task per array block | synthetic arithmetic workload |
+| heterogeneous | sequential class-based CPU loop + CUDA task grid | mixed light/medium/heavy tasks submitted together | task classes are synthetic but isolate scheduler behavior |
+| image | whole-image CPU/GPU functions | one task per image tile | convolution borders use simplified per-tile no-halo handling |
+| overhead | none | noop/memcpy microbenchmarks | auxiliary only, not a replacement for per-scenario overhead analysis |
 
-## API usability
+## Integration Complexity
 
-**Pros:**
-- Single codelet definition covers CPU and GPU variants
-- Data handles abstract migration between memories
-- Built-in profiling (`STARPU_PROF=1`) for scheduling analysis
+StarPU adds complexity mostly through:
 
-**Cons:**
-- Must register data before submitting tasks
-- `cl_arg` lifetime must outlive tasks (use persistent storage)
-- Separate CUDA compilation unit required for `__global__` kernels / cuBLAS in codelets
-- Worker restriction (`ncpu=0` / `ncuda=0`) requires understanding of `starpu_conf`
+- data handle registration and unregistering;
+- `starpu_task` creation and lifetime;
+- stable `cl_arg` storage until task completion;
+- separate CUDA compilation units for kernels used by codelets;
+- interpreting traces and separating scheduling time from compute/data movement.
 
-## Debugging & profiling
+The native paths are intentionally plain so the comparison focuses on scheduling and data movement rather than tuned library performance.
+
+## Scheduling And Data Movement Overhead
+
+The main JSON outputs record total runtime and task/block/tile counts. StarPU traces are enabled by default through `STARPU_PROF=1`, and each JSON result links to the trace prefix through `starpu_trace_prefix`.
+
+System metrics are sampled by `scripts/collect_metrics.sh`; each JSON result links the matching CSV through `system_metrics_csv`.
+
+`bench_overhead` remains as an auxiliary microbenchmark for noop task submission and memcpy-style data movement. It should be reported separately from the main scenario comparisons.
+
+## Debugging And Profiling
 
 | Tool | Purpose |
 |------|---------|
 | `STARPU_PROF=1` + `STARPU_FXT_PREFIX` | Task timeline traces |
 | `scripts/collect_metrics.sh` | CPU/GPU/memory sampling |
-| `std::chrono` in benchmarks | Wall-clock JSON output |
-| CUDA events | Native GPU kernel timing |
-| `nvidia-smi`, `mpstat` | External utilization (thesis spec) |
+| Benchmark JSON | Runtime, parameters, task counts, result file linkage |
+| `nvidia-smi`, `mpstat` | External utilization checks |
 
-## Known issues
+## Known Issues And Assumptions
 
-1. **Remote driver mismatch** — if `nvidia-smi` fails with "Driver/library version mismatch", reboot the machine after driver update.
+1. **Remote driver mismatch** — if `nvidia-smi` fails with "Driver/library version mismatch", reboot after driver update.
 2. **Docker GPU** — requires `nvidia-container-toolkit` and `--gpus all`.
-3. **Image blur on GPU** — simplified to grayscale in CUDA tile path; full convolution blur runs on CPU/StarPU-CPU path.
-
-## Metrics mapping to thesis
-
-| Thesis metric | Implementation |
-|---------------|----------------|
-| Execution time | `MetricsWriter` JSON (`total_time_ms`, `gflops`) |
-| CPU/GPU load | `collect_metrics.sh` → CSV |
-| Memory usage | `collect_metrics.sh` (RAM + VRAM columns) |
-| StarPU overhead | `bench_overhead` (noop vs memcpy tasks) + StarPU traces |
-| Integration complexity | this document |
+3. **Image tile borders** — StarPU image blur/convolution uses simplified per-tile borders without halo exchange; this is recorded in result metadata.
+4. **Synthetic workloads** — independent and heterogeneous scenarios are designed to expose scheduling behavior, not to model a specific production application.
