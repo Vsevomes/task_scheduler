@@ -1,0 +1,123 @@
+# TODO: bring benchmarks in line with the research spec
+
+## Core execution model
+
+- Remove StarPU-only comparison modes from the main benchmark matrix:
+  - remove `starpu_cpu`;
+  - remove `starpu_gpu`;
+  - keep only `native_cpu`, `native_gpu`, `starpu_hybrid`.
+- StarPU should be evaluated as a heterogeneous scheduler, not as a wrapper around CPU-only/GPU-only execution.
+- Update `ExecutionMode`, CLI help, README, scripts, and experiment matrix accordingly.
+
+## Native baselines
+
+- Add `native_cpu` and `native_gpu` implementations for every main scenario:
+  - `matmul`;
+  - `independent`;
+  - `heterogeneous`;
+  - `image`.
+- Native CPU implementations should be simple and understandable, preferably scalar/linear loops where possible.
+- Native GPU implementations should use straightforward CUDA kernels with simple data parallelism.
+- Avoid highly optimized native baselines that make the comparison about library tuning instead of scheduling.
+
+## Matrix multiplication
+
+- Replace the current monolithic StarPU matmul task with a blocked/tiled implementation.
+- Submit many independent block tasks so StarPU can actually distribute work between CPU and GPU.
+- Use matrix sizes from the plan:
+  - 512x512;
+  - 1024x1024;
+  - 2048x2048;
+  - optionally larger sizes if memory and runtime allow.
+- Consider whether to replace BLAS/cuBLAS with simpler CPU/GPU kernels for methodological consistency.
+- Record tile size and number of submitted tasks in JSON metrics.
+
+## Independent tasks
+
+- Replace the current matvec-based workload with a simpler independent array-processing workload, for example:
+  `y[i] = sin(x[i]) + sqrt(x[i]) + x[i]^2`.
+- Each task should process a separate block/array and be independent from all other tasks.
+- Add all three main modes:
+  - native CPU sequential or simple threaded baseline if explicitly needed;
+  - native GPU simple kernel over all blocks;
+  - StarPU hybrid with one task per block.
+- Vary task count to study scheduler behavior under different parallelism levels.
+- Record task count, block size, total elements, and average task time.
+
+## Heterogeneous workload
+
+- Redesign the scenario around multiple task classes:
+  - light tasks: small array processing;
+  - medium tasks: medium array processing or small matrix operation;
+  - heavy tasks: larger array processing or larger matrix operation.
+- Add native CPU and native GPU baselines.
+- Keep StarPU hybrid as the only StarPU mode.
+- Submit tasks simultaneously to create uneven load and test dynamic balancing.
+- Record counts per task class, sizes per class, and aggregate runtime.
+
+## Image / edge-oriented scenario
+
+- Keep image tiling, because it matches the edge-oriented scenario well.
+- Replace or extend operations to match the plan:
+  - blur;
+  - edge detection;
+  - convolution;
+  - filtering.
+- Fix current GPU blur behavior: it currently falls back to grayscale and is not a real blur.
+- Fix native CPU image path so it uses a normal CPU function, not a StarPU buffer accessor.
+- For convolution/blur on tiles, handle borders/halo regions correctly or explicitly document simplified borders.
+- Add native CPU and native GPU paths for all selected operations.
+- Record image size, tile size, operation, tile count, and possibly number of images if batch processing is added.
+
+## Metrics and output files
+
+- Every benchmark run must write a machine-readable result file.
+- JSON result files should include:
+  - scenario;
+  - mode;
+  - input parameters;
+  - total runtime;
+  - task count;
+  - block/tile size;
+  - StarPU-specific overhead fields when applicable;
+  - path to system metrics CSV;
+  - path/prefix to StarPU trace files when profiling is enabled.
+- System metrics CSV should be linked to the benchmark JSON through a shared run id or explicit file path.
+- Update `run_experiment.sh` so it passes or records the metrics CSV path in the result metadata.
+
+## StarPU overhead
+
+- Reconsider the standalone `bench_overhead` scenario.
+- The current noop/memcpy benchmark is useful as a microbenchmark for task submission and data movement overhead.
+- It is not fully representative of overhead inside real workloads, because real scenarios include computation, tiling, data dependencies, and CPU/GPU scheduling decisions.
+- Prefer measuring overhead inside each main test case:
+  - native total time vs StarPU hybrid total time for comparable work;
+  - StarPU initialization time;
+  - data registration time;
+  - task submission time;
+  - wait/synchronization time;
+  - data unregister/copy-back time.
+- Keep `bench_overhead` only as an auxiliary microbenchmark, not as a replacement for per-scenario overhead analysis.
+
+## Remove unused benchmark
+
+- Remove `hello_starpu`.
+- Delete it from:
+  - CMake target list;
+  - README;
+  - run scripts;
+  - experiment matrix.
+- It is useful only as a sanity check and does not contribute to the research evaluation.
+
+## Documentation
+
+- Rewrite README around the final three modes:
+  - `native_cpu`;
+  - `native_gpu`;
+  - `starpu_hybrid`.
+- Update integration notes so they distinguish:
+  - implementation complexity;
+  - scheduling overhead;
+  - data movement overhead;
+  - limitations of each scenario.
+- Document any hardware/platform deviations separately from benchmark methodology.
