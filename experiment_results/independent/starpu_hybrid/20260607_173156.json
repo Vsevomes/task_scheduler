@@ -1,0 +1,21 @@
+{
+  "scenario": "independent",
+  "mode": "starpu_hybrid",
+  "params": {
+    "block_size": "1024",
+    "tasks": "5000",
+    "total_elements": "5120000"
+  },
+  "metrics": {
+    "avg_task_ms": 0.053475,
+    "starpu_data_registration_ms": 18.285863,
+    "starpu_data_unregister_ms": 24.996659,
+    "starpu_init_ms": 192.233718,
+    "starpu_task_submission_ms": 31.748021,
+    "starpu_wait_ms": 0.070093,
+    "task_count": 5000.000000,
+    "total_time_ms": 267.374609
+  },
+  "system_metrics_csv": null,
+  "starpu_trace_prefix": null
+}

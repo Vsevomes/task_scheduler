@@ -1,0 +1,13 @@
+{
+  "scenario": "overhead",
+  "mode": "starpu_hybrid",
+  "params": {
+    "bytes": "1048576",
+    "kind": "noop",
+    "tasks": "10000"
+  },
+  "metrics": {
+    "avg_task_us": 61.792327,
+    "total_time_ms": 617.923273
+  }
+}

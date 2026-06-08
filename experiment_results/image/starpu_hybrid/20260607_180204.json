@@ -1,0 +1,25 @@
+{
+  "scenario": "image",
+  "mode": "starpu_hybrid",
+  "params": {
+    "height": "4320",
+    "mixed_ops": "true",
+    "operation": "blur",
+    "starpu_sched": "dmda",
+    "tile_border_policy": "per_tile_simplified_borders_no_halo",
+    "tile_size": "32",
+    "width": "7680"
+  },
+  "metrics": {
+    "megapixels": 33.177600,
+    "starpu_data_registration_ms": 128.679591,
+    "starpu_data_unregister_copyback_ms": 54.505575,
+    "starpu_init_ms": 225.834959,
+    "starpu_task_submission_ms": 221.412722,
+    "starpu_wait_ms": 0.012964,
+    "task_count": 32400.000000,
+    "total_time_ms": 633.065968
+  },
+  "system_metrics_csv": null,
+  "starpu_trace_prefix": null
+}

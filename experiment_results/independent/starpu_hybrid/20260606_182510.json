@@ -1,0 +1,13 @@
+{
+  "scenario": "independent",
+  "mode": "starpu_hybrid",
+  "params": {
+    "size": "256",
+    "tasks": "1000"
+  },
+  "metrics": {
+    "avg_task_ms": 0.635058,
+    "task_count": 1000.000000,
+    "total_time_ms": 635.057780
+  }
+}

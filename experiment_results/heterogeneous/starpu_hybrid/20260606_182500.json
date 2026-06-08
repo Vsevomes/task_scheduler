@@ -1,0 +1,15 @@
+{
+  "scenario": "heterogeneous",
+  "mode": "starpu_hybrid",
+  "params": {
+    "heavy_size": "384",
+    "light_ratio": "0.700000",
+    "light_size": "256",
+    "tasks": "100"
+  },
+  "metrics": {
+    "heavy_tasks": 30.000000,
+    "light_tasks": 70.000000,
+    "total_time_ms": 59.927360
+  }
+}

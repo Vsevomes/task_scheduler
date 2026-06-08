@@ -1,0 +1,22 @@
+{
+  "scenario": "matmul",
+  "mode": "starpu_hybrid",
+  "params": {
+    "size": "2048",
+    "starpu_sched": "dmda",
+    "submitted_tasks": "64",
+    "tile_size": "256"
+  },
+  "metrics": {
+    "gflops": 49.613784,
+    "starpu_data_registration_ms": 15.745878,
+    "starpu_data_unregister_copyback_ms": 13.055419,
+    "starpu_init_ms": 229.495420,
+    "starpu_task_submission_ms": 4.198292,
+    "starpu_wait_ms": 83.765568,
+    "task_count": 64.000000,
+    "total_time_ms": 346.272098
+  },
+  "system_metrics_csv": null,
+  "starpu_trace_prefix": null
+}

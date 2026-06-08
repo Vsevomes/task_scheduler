@@ -1,0 +1,11 @@
+{
+  "scenario": "hello",
+  "mode": "starpu_cpu",
+  "params": {
+    "size": "1048576"
+  },
+  "metrics": {
+    "task_count": 1.000000,
+    "total_time_ms": 0.355213
+  }
+}

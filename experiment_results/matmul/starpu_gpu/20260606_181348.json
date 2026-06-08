@@ -1,0 +1,12 @@
+{
+  "scenario": "matmul",
+  "mode": "starpu_gpu",
+  "params": {
+    "size": "1024"
+  },
+  "metrics": {
+    "gflops": 48.262930,
+    "gpu_kernel_ms": 0.000000,
+    "total_time_ms": 44.495509
+  }
+}

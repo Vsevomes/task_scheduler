@@ -1,0 +1,13 @@
+{
+  "scenario": "image",
+  "mode": "starpu_hybrid",
+  "params": {
+    "height": "720",
+    "operation": "grayscale",
+    "width": "1280"
+  },
+  "metrics": {
+    "megapixels": 0.921600,
+    "total_time_ms": 592.441146
+  }
+}

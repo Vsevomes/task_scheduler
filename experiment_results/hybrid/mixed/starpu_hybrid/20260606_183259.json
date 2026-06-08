@@ -1,0 +1,16 @@
+{
+  "scenario": "hybrid",
+  "mode": "starpu_hybrid",
+  "params": {
+    "heavy_size": "768",
+    "kind": "mixed",
+    "light_ratio": "0.800000",
+    "light_size": "128",
+    "tasks": "2000"
+  },
+  "metrics": {
+    "heavy_tasks": 400.000000,
+    "light_tasks": 1600.000000,
+    "total_time_ms": 1961.312485
+  }
+}

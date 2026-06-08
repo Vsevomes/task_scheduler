@@ -1,0 +1,15 @@
+{
+  "scenario": "hybrid",
+  "mode": "starpu_cpu",
+  "params": {
+    "kind": "tiled",
+    "size": "4096",
+    "tasks": "256",
+    "tile": "256"
+  },
+  "metrics": {
+    "gflops": 61.477068,
+    "task_count": 256.000000,
+    "total_time_ms": 2235.613329
+  }
+}

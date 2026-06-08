@@ -1,0 +1,12 @@
+{
+  "scenario": "matmul",
+  "mode": "native_cpu",
+  "params": {
+    "size": "2048"
+  },
+  "metrics": {
+    "gflops": 245.125877,
+    "gpu_kernel_ms": 0.000000,
+    "total_time_ms": 70.085906
+  }
+}

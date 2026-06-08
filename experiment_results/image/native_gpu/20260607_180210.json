@@ -1,0 +1,19 @@
+{
+  "scenario": "image",
+  "mode": "native_gpu",
+  "params": {
+    "height": "4320",
+    "mixed_ops": "true",
+    "operation": "blur",
+    "tile_border_policy": "per_tile_simplified_borders_no_halo",
+    "tile_size": "32",
+    "width": "7680"
+  },
+  "metrics": {
+    "megapixels": 33.177600,
+    "task_count": 32400.000000,
+    "total_time_ms": 4549.645537
+  },
+  "system_metrics_csv": null,
+  "starpu_trace_prefix": null
+}
