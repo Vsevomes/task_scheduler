@@ -1,0 +1,16 @@
+{
+  "scenario": "matmul",
+  "mode": "native_gpu",
+  "params": {
+    "size": "2048",
+    "submitted_tasks": "1",
+    "tile_size": "256"
+  },
+  "metrics": {
+    "gflops": 69.579615,
+    "task_count": 1.000000,
+    "total_time_ms": 246.909517
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_matmul_20260608_093307.csv",
+  "starpu_trace_prefix": "results/trace_matmul_"
+}

@@ -1,0 +1,3 @@
+timestamp,cpu_user,cpu_sys,gpu_util,gpu_mem_used_mb,gpu_mem_total_mb,mem_used_mb,mem_total_mb
+1780902339,3,56,6,53,0,285,8188,2090,15932
+1780902340,40,52,2,92,0,645,8188,2487,15932

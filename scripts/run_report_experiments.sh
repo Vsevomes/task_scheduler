@@ -21,11 +21,11 @@ MATMUL_SIZES=(512 2048 8192)
 MATMUL_TILE=256
 
 # --- independent: number of blocks × block size ---
-INDEPENDENT_TASKS=(500 3000 5000)
+INDEPENDENT_TASKS=(1500 9000 15000)
 INDEPENDENT_BLOCK=4096
 
 # --- heterogeneous: task count + light / medium / heavy mix ---
-HETERO_TASKS=(1000 3000 5000)
+HETERO_TASKS=(3000 9000 15000)
 HETERO_LIGHT_RATIO=0.5   # 50% light tasks
 HETERO_MEDIUM_RATIO=0.3  # 30% medium tasks
 # remaining 20% heavy

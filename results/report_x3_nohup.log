@@ -1,0 +1,887 @@
+
+Report matrix summary
+=====================
+Modes (each scenario): native_cpu native_gpu starpu_hybrid
+StarPU scheduler: ${STARPU_SCHED:-dmda}
+
+matmul       N=512 2048 8192  tile=256  -> 9 runs
+independent  tasks=1500 9000 15000  block=4096  -> 9 runs
+heterogeneous tasks=3000 9000 15000
+              light 0.5 / medium 0.3 / heavy 0.2
+              sizes 2048 / 16384 / 65536  -> 9 runs
+image        7680 4320 15360 8640 30720 17280  op=blur mixed-ops  -> 9 runs
+
+Total: 36 benchmark runs
+Results: results/report/*.json
+Log: results/report_x3.log
+
+Note: matmul 8192 native_cpu and image 32K may take a long time.
+
+Started ср 10 июнь 2026 00:34:01 MSK
+=== independent (tasks: 1500 9000 15000, block=4096) ===
+--- independent mode=native_cpu tasks=1500 ---
+Running bench_independent with args: --mode native_cpu --tasks 1500 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_cpu_1500.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003401.csv
+bench_independent: tasks=1500 block=4096 mode=native_cpu time=126.922 ms -> /home/nikitos/task_scheduler/results/report/independent_native_cpu_1500.json
+=== Run summary ===
+Scenario: independent  mode: native_cpu
+Params: block_size=4096, tasks=1500, total_elements=6144000
+
+--- Memory ---
+RAM:  used avg=447 MB  max=447 MB  of 8188 MB (5.5% peak)
+VRAM: used avg=73 MB  max=73 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=2.0%  max=2.0%  samples=1
+CPU total: usr avg=0.0% max=0.0% | sys avg=0.0% max=0.0% | samples=1
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core 11: avg= 90.0%  peak= 90.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  3: avg= 67.0%  peak= 67.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  8: avg= 45.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  2: avg= 23.0%  peak= 23.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  1: avg= 11.5%  peak= 23.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  0: avg=  5.5%  peak= 11.0%  (usr=3.5 sys=20.5) samples=2  <- active
+  core  9: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  7: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  6: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  5: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  4: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+
+Active cores (avg>=5% or peak>=20%): CPU11, CPU3, CPU8, CPU2, CPU1, CPU0
+Mostly idle: CPU9, CPU7, CPU6, CPU5, CPU4, CPU10
+All cores: avg used=18.5%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 126.9 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 1500
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003401.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003401_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_cpu_1500.json
+--- independent mode=native_cpu tasks=9000 ---
+Running bench_independent with args: --mode native_cpu --tasks 9000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_cpu_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003402.csv
+bench_independent: tasks=9000 block=4096 mode=native_cpu time=769.548 ms -> /home/nikitos/task_scheduler/results/report/independent_native_cpu_9000.json
+=== Run summary ===
+Scenario: independent  mode: native_cpu
+Params: block_size=4096, tasks=9000, total_elements=36864000
+
+--- Memory ---
+RAM:  used avg=464 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=81 MB  max=86 MB  of 1 MB (8600.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=5.0%  max=10.0%  samples=2
+CPU total: usr avg=6.0% max=8.0% | sys avg=64.5% max=93.0% | samples=2
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  0: avg= 56.7%  peak= 90.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  1: avg= 34.7%  peak= 71.0%  (usr=2.0 sys=30.0) samples=3  <- active
+  core  7: avg= 35.0%  peak= 70.0%  (usr=5.5 sys=5.5) samples=2  <- active
+  core  2: avg= 37.3%  peak= 67.0%  (usr=4.3 sys=11.0) samples=3  <- active
+  core  4: avg= 33.3%  peak= 67.0%  (usr=1.0 sys=11.0) samples=3  <- active
+  core  5: avg= 33.0%  peak= 66.0%  (usr=55.0 sys=17.0) samples=2  <- active
+  core  8: avg= 28.5%  peak= 57.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  9: avg= 22.5%  peak= 45.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  6: avg=  0.0%  peak=  0.0%  (usr=1.5 sys=22.5) samples=2
+  core  3: avg=  0.0%  peak=  0.0%  (usr=2.0 sys=22.3) samples=3
+  core 11: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core 10: avg=  0.0%  peak=  0.0%  (usr=1.5 sys=28.5) samples=2
+
+Active cores (avg>=5% or peak>=20%): CPU0, CPU1, CPU7, CPU2, CPU4, CPU5, CPU8, CPU9
+Mostly idle: CPU6, CPU3, CPU11, CPU10
+All cores: avg used=25.0%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 769.5 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 9000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003402.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003402_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_cpu_9000.json
+--- independent mode=native_cpu tasks=15000 ---
+Running bench_independent with args: --mode native_cpu --tasks 15000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_cpu_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003404.csv
+bench_independent: tasks=15000 block=4096 mode=native_cpu time=1171.800 ms -> /home/nikitos/task_scheduler/results/report/independent_native_cpu_15000.json
+=== Run summary ===
+Scenario: independent  mode: native_cpu
+Params: block_size=4096, tasks=15000, total_elements=61440000
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=22 MB  max=53 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=3.5%  max=9.0%  samples=4
+CPU total: usr avg=6.5% max=9.0% | sys avg=45.5% max=77.0% | samples=4
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  1: avg= 45.2%  peak= 90.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  7: avg= 33.8%  peak= 90.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  3: avg= 21.5%  peak= 86.0%  (usr=76.8 sys=3.5) samples=4  <- active
+  core  8: avg= 43.2%  peak= 57.0%  (usr=1.5 sys=25.5) samples=4  <- active
+  core  6: avg= 25.5%  peak= 57.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core 10: avg= 25.5%  peak= 57.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  0: avg= 17.0%  peak= 57.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  4: avg= 11.2%  peak= 45.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core 11: avg= 11.2%  peak= 45.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  5: avg=  8.2%  peak= 33.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  9: avg=  3.5%  peak= 14.0%  (usr=0.8 sys=11.2) samples=4
+  core  2: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=4
+
+Active cores (avg>=5% or peak>=20%): CPU1, CPU7, CPU3, CPU8, CPU6, CPU10, CPU0, CPU4, CPU11, CPU5
+Mostly idle: CPU2
+All cores: avg used=20.5%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 1171.8 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 15000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003404.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003404_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_cpu_15000.json
+--- independent mode=native_gpu tasks=1500 ---
+Running bench_independent with args: --mode native_gpu --tasks 1500 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_gpu_1500.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003406.csv
+bench_independent: tasks=1500 block=4096 mode=native_gpu time=243.404 ms -> /home/nikitos/task_scheduler/results/report/independent_native_gpu_1500.json
+=== Run summary ===
+Scenario: independent  mode: native_gpu
+Params: block_size=4096, tasks=1500, total_elements=6144000
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=25 MB  max=25 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=9.0%  max=9.0%  samples=1
+CPU total: usr avg=3.0% max=3.0% | sys avg=47.0% max=47.0% | samples=1
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  0: avg= 90.0%  peak= 90.0%  (usr=6.0 sys=90.0) samples=1  <- active
+  core  1: avg= 48.0%  peak= 48.0%  (usr=3.0 sys=45.0) samples=1  <- active
+  core  2: avg= 45.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  3: avg= 43.0%  peak= 43.0%  (usr=32.0 sys=14.0) samples=1  <- active
+  core  7: avg= 33.0%  peak= 33.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  5: avg= 24.0%  peak= 24.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  9: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  8: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  6: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  4: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core 11: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+
+Active cores (avg>=5% or peak>=20%): CPU0, CPU1, CPU2, CPU3, CPU7, CPU5
+Mostly idle: CPU9, CPU8, CPU6, CPU4, CPU11, CPU10
+All cores: avg used=23.6%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 243.4 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 1500
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003406.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003406_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_gpu_1500.json
+--- independent mode=native_gpu tasks=9000 ---
+Running bench_independent with args: --mode native_gpu --tasks 9000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_gpu_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003407.csv
+bench_independent: tasks=9000 block=4096 mode=native_gpu time=225.518 ms -> /home/nikitos/task_scheduler/results/report/independent_native_gpu_9000.json
+=== Run summary ===
+Scenario: independent  mode: native_gpu
+Params: block_size=4096, tasks=9000, total_elements=36864000
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=46 MB  max=72 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=6.5%  max=8.0%  samples=2
+CPU total: usr avg=2.5% max=4.0% | sys avg=39.5% max=45.0% | samples=2
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  6: avg= 33.5%  peak= 67.0%  (usr=1.5 sys=16.5) samples=2  <- active
+  core  9: avg= 52.0%  peak= 66.0%  (usr=29.0 sys=31.0) samples=2  <- active
+  core  0: avg= 51.0%  peak= 57.0%  (usr=1.5 sys=22.5) samples=2  <- active
+  core  1: avg= 45.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  2: avg= 22.5%  peak= 45.0%  (usr=1.5 sys=22.5) samples=2  <- active
+  core  4: avg= 17.0%  peak= 34.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  8: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core  7: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core  5: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core  3: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core 11: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+
+Active cores (avg>=5% or peak>=20%): CPU6, CPU9, CPU0, CPU1, CPU2, CPU4
+Mostly idle: CPU8, CPU7, CPU5, CPU3, CPU11, CPU10
+All cores: avg used=18.4%  peak on one core=67.0%
+
+--- Timing / overhead ---
+Total wall time: 225.5 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 9000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003407.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003407_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_gpu_9000.json
+--- independent mode=native_gpu tasks=15000 ---
+Running bench_independent with args: --mode native_gpu --tasks 15000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_native_gpu_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003408.csv
+bench_independent: tasks=15000 block=4096 mode=native_gpu time=273.472 ms -> /home/nikitos/task_scheduler/results/report/independent_native_gpu_15000.json
+=== Run summary ===
+Scenario: independent  mode: native_gpu
+Params: block_size=4096, tasks=15000, total_elements=61440000
+
+--- Memory ---
+RAM:  used avg=474 MB  max=486 MB  of 8188 MB (5.9% peak)
+VRAM: used avg=56 MB  max=63 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=4.7%  max=7.0%  samples=3
+CPU total: usr avg=4.3% max=8.0% | sys avg=48.3% max=67.0% | samples=3
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  0: avg= 45.0%  peak= 90.0%  (usr=2.0 sys=30.0) samples=3  <- active
+  core  6: avg= 30.0%  peak= 90.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  5: avg= 33.0%  peak= 71.0%  (usr=51.7 sys=22.3) samples=3  <- active
+  core  2: avg= 41.3%  peak= 67.0%  (usr=1.0 sys=11.0) samples=3  <- active
+  core  1: avg= 30.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  8: avg= 15.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  7: avg= 11.0%  peak= 33.0%  (usr=1.0 sys=11.0) samples=3  <- active
+  core 10: avg= 11.0%  peak= 33.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  9: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=3
+  core  4: avg=  0.0%  peak=  0.0%  (usr=1.0 sys=11.0) samples=3
+  core  3: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=3
+  core 11: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=3
+
+Active cores (avg>=5% or peak>=20%): CPU0, CPU6, CPU5, CPU2, CPU1, CPU8, CPU7, CPU10
+Mostly idle: CPU9, CPU4, CPU3, CPU11
+All cores: avg used=18.0%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 273.5 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+Tasks/tiles: 15000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003408.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003408_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_native_gpu_15000.json
+--- independent mode=starpu_hybrid tasks=1500 ---
+Running bench_independent with args: --mode starpu_hybrid --tasks 1500 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_1500.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003410.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_independent: tasks=1500 block=4096 mode=starpu_hybrid time=261.828 ms -> /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_1500.json
+=== Run summary ===
+Scenario: independent  mode: starpu_hybrid
+Params: block_size=4096, starpu_sched=dmda, tasks=1500, total_elements=6144000
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=75 MB  max=75 MB  of 76 MB (98.7% peak)
+
+--- Utilization ---
+GPU compute util: avg=5.0%  max=5.0%  samples=1
+CPU total: usr avg=8.0% max=8.0% | sys avg=5.0% max=5.0% | samples=1
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  6: avg= 90.0%  peak= 90.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core 11: avg= 79.0%  peak= 79.0%  (usr=3.0 sys=45.0) samples=1  <- active
+  core  0: avg= 79.0%  peak= 79.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  8: avg= 45.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=1  <- active
+  core  4: avg= 43.0%  peak= 43.0%  (usr=39.0 sys=29.0) samples=1  <- active
+  core  5: avg= 34.0%  peak= 34.0%  (usr=13.0 sys=79.0) samples=1  <- active
+  core  9: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  7: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  3: avg=  0.0%  peak=  0.0%  (usr=13.0 sys=79.0) samples=1
+  core  2: avg=  0.0%  peak=  0.0%  (usr=13.0 sys=79.0) samples=1
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=1
+  core  1: avg=  0.0%  peak=  0.0%  (usr=13.0 sys=33.0) samples=1
+
+Active cores (avg>=5% or peak>=20%): CPU6, CPU11, CPU0, CPU8, CPU4, CPU5
+Mostly idle: CPU9, CPU7, CPU3, CPU2, CPU10, CPU1
+All cores: avg used=30.8%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 261.8 ms
+StarPU breakdown:
+  StarPU init                     221.7 ms  (84.7%)
+  Data registration                 5.3 ms  ( 2.0%)
+  Task submission                   8.7 ms  ( 3.3%)
+  Task wait (compute+transfer)      9.4 ms  ( 3.6%)
+  Data unregister                  16.7 ms  ( 6.4%)
+  Overhead (excl. wait)           252.4 ms  (96.4%)
+  Useful wait phase                 9.4 ms  ( 3.6%)
+Tasks/tiles: 1500
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003410.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003410_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_1500.json
+--- independent mode=starpu_hybrid tasks=9000 ---
+Running bench_independent with args: --mode starpu_hybrid --tasks 9000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003410.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_independent: tasks=9000 block=4096 mode=starpu_hybrid time=415.070 ms -> /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_9000.json
+=== Run summary ===
+Scenario: independent  mode: starpu_hybrid
+Params: block_size=4096, starpu_sched=dmda, tasks=9000, total_elements=36864000
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=58 MB  max=85 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=7.0%  max=7.0%  samples=2
+CPU total: usr avg=12.0% max=23.0% | sys avg=42.0% max=45.0% | samples=2
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  9: avg= 43.0%  peak= 86.0%  (usr=1.5 sys=22.5) samples=2  <- active
+  core  8: avg= 28.5%  peak= 57.0%  (usr=1.5 sys=28.5) samples=2  <- active
+  core  6: avg= 45.0%  peak= 45.0%  (usr=1.5 sys=22.5) samples=2  <- active
+  core  0: avg= 29.5%  peak= 45.0%  (usr=7.0 sys=14.5) samples=2  <- active
+  core 11: avg= 22.5%  peak= 45.0%  (usr=0.0 sys=0.0) samples=2  <- active
+  core  7: avg= 16.5%  peak= 33.0%  (usr=1.5 sys=16.5) samples=2  <- active
+  core  5: avg= 14.5%  peak= 29.0%  (usr=23.0 sys=21.5) samples=2  <- active
+  core  4: avg= 14.5%  peak= 29.0%  (usr=42.5 sys=35.5) samples=2  <- active
+  core  3: avg=  0.0%  peak=  0.0%  (usr=23.0 sys=21.5) samples=2
+  core  2: avg=  0.0%  peak=  0.0%  (usr=24.0 sys=14.0) samples=2
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=2
+  core  1: avg=  0.0%  peak=  0.0%  (usr=23.0 sys=21.5) samples=2
+
+Active cores (avg>=5% or peak>=20%): CPU9, CPU8, CPU6, CPU0, CPU11, CPU7, CPU5, CPU4
+Mostly idle: CPU3, CPU2, CPU10, CPU1
+All cores: avg used=17.8%  peak on one core=86.0%
+
+--- Timing / overhead ---
+Total wall time: 415.1 ms
+StarPU breakdown:
+  StarPU init                     183.2 ms  (44.1%)
+  Data registration                32.0 ms  ( 7.7%)
+  Task submission                  50.6 ms  (12.2%)
+  Task wait (compute+transfer)     56.2 ms  (13.5%)
+  Data unregister                  93.0 ms  (22.4%)
+  Overhead (excl. wait)           358.8 ms  (86.4%)
+  Useful wait phase                56.2 ms  (13.5%)
+Tasks/tiles: 9000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003410.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003410_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_9000.json
+--- independent mode=starpu_hybrid tasks=15000 ---
+Running bench_independent with args: --mode starpu_hybrid --tasks 15000 --size 4096 --output /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_independent_20260610_003412.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_independent: tasks=15000 block=4096 mode=starpu_hybrid time=598.711 ms -> /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_15000.json
+=== Run summary ===
+Scenario: independent  mode: starpu_hybrid
+Params: block_size=4096, starpu_sched=dmda, tasks=15000, total_elements=61440000
+
+--- Memory ---
+RAM:  used avg=469 MB  max=471 MB  of 8188 MB (5.8% peak)
+VRAM: used avg=46 MB  max=67 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=5.7%  max=9.0%  samples=3
+CPU total: usr avg=17.0% max=43.0% | sys avg=82.3% max=88.0% | samples=3
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  0: avg= 40.7%  peak= 93.0%  (usr=48.0 sys=40.0) samples=3  <- active
+  core  7: avg= 52.3%  peak= 90.0%  (usr=1.0 sys=11.0) samples=3  <- active
+  core 10: avg= 34.0%  peak= 57.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  9: avg= 30.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  4: avg= 19.7%  peak= 45.0%  (usr=30.7 sys=28.7) samples=3  <- active
+  core 11: avg= 19.7%  peak= 45.0%  (usr=8.3 sys=0.0) samples=3  <- active
+  core  8: avg= 15.0%  peak= 45.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  1: avg= 15.0%  peak= 45.0%  (usr=29.7 sys=22.0) samples=3  <- active
+  core  6: avg= 11.0%  peak= 33.0%  (usr=0.0 sys=0.0) samples=3  <- active
+  core  5: avg=  0.0%  peak=  0.0%  (usr=29.7 sys=22.0) samples=3
+  core  3: avg=  0.0%  peak=  0.0%  (usr=34.3 sys=31.7) samples=3
+  core  2: avg=  0.0%  peak=  0.0%  (usr=29.7 sys=22.0) samples=3
+
+Active cores (avg>=5% or peak>=20%): CPU0, CPU7, CPU10, CPU9, CPU4, CPU11, CPU8, CPU1, CPU6
+Mostly idle: CPU5, CPU3, CPU2
+All cores: avg used=19.8%  peak on one core=93.0%
+
+--- Timing / overhead ---
+Total wall time: 598.7 ms
+StarPU breakdown:
+  StarPU init                     217.2 ms  (36.3%)
+  Data registration                53.2 ms  ( 8.9%)
+  Task submission                  83.7 ms  (14.0%)
+  Task wait (compute+transfer)     86.8 ms  (14.5%)
+  Data unregister                 157.7 ms  (26.3%)
+  Overhead (excl. wait)           511.8 ms  (85.5%)
+  Useful wait phase                86.8 ms  (14.5%)
+Tasks/tiles: 15000
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003412.csv
+  /home/nikitos/task_scheduler/results/system_independent_20260610_003412_cores.csv
+  /home/nikitos/task_scheduler/results/report/independent_starpu_hybrid_15000.json
+Finished ср 10 июнь 2026 00:34:14 MSK
+JSON count: 45
+
+Report matrix summary
+=====================
+Modes (each scenario): native_cpu native_gpu starpu_hybrid
+StarPU scheduler: ${STARPU_SCHED:-dmda}
+
+matmul       N=512 2048 8192  tile=256  -> 9 runs
+independent  tasks=1500 9000 15000  block=4096  -> 9 runs
+heterogeneous tasks=3000 9000 15000
+              light 0.5 / medium 0.3 / heavy 0.2
+              sizes 2048 / 16384 / 65536  -> 9 runs
+image        7680 4320 15360 8640 30720 17280  op=blur mixed-ops  -> 9 runs
+
+Total: 36 benchmark runs
+Results: results/report/*.json
+Log: results/report_x3.log
+
+Note: matmul 8192 native_cpu and image 32K may take a long time.
+
+Started ср 10 июнь 2026 00:34:14 MSK
+=== heterogeneous (tasks: 3000 9000 15000) ===
+    mix: light=0.5 medium=0.3 heavy=0.2
+    sizes: light=2048 medium=16384 heavy=65536
+--- heterogeneous mode=native_cpu tasks=3000 ---
+Running bench_heterogeneous with args: --mode native_cpu --tasks 3000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_3000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003414.csv
+bench_heterogeneous: tasks=3000 light=1500 medium=900 heavy=600 mode=native_cpu time=55757.667 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_3000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_cpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=3000, total_elements=57139200
+
+--- Memory ---
+RAM:  used avg=468 MB  max=468 MB  of 8188 MB (5.7% peak)
+VRAM: used avg=47 MB  max=89 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=0.9%  max=8.0%  samples=88
+CPU total: usr avg=8.0% max=9.0% | sys avg=50.1% max=99.0% | samples=88
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  3: avg= 22.2%  peak= 90.0%  (usr=0.4 sys=5.2) samples=88  <- active
+  core 11: avg= 19.8%  peak= 90.0%  (usr=0.3 sys=4.3) samples=88  <- active
+  core  9: avg= 19.3%  peak= 90.0%  (usr=0.2 sys=2.9) samples=88  <- active
+  core  5: avg= 16.6%  peak= 90.0%  (usr=0.3 sys=4.7) samples=88  <- active
+  core 10: avg= 15.1%  peak= 90.0%  (usr=0.2 sys=2.5) samples=88  <- active
+  core  4: avg= 13.6%  peak= 90.0%  (usr=0.2 sys=2.0) samples=88  <- active
+  core  7: avg=  7.4%  peak= 90.0%  (usr=0.1 sys=0.9) samples=88  <- active
+  core  2: avg=  5.7%  peak= 45.0%  (usr=8.7 sys=4.1) samples=88  <- active
+  core  1: avg=  5.0%  peak= 45.0%  (usr=0.2 sys=1.7) samples=88  <- active
+  core  0: avg=  3.4%  peak= 45.0%  (usr=24.9 sys=5.8) samples=88  <- active
+  core  6: avg=  2.5%  peak= 45.0%  (usr=27.8 sys=2.4) samples=88  <- active
+  core  8: avg=  1.9%  peak= 45.0%  (usr=38.0 sys=2.0) samples=88  <- active
+
+Active cores (avg>=5% or peak>=20%): CPU3, CPU11, CPU9, CPU5, CPU10, CPU4, CPU7, CPU2, CPU1, CPU0, CPU6, CPU8
+All cores: avg used=11.0%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 55757.7 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003414.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003414_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_3000.json
+--- heterogeneous mode=native_cpu tasks=9000 ---
+Running bench_heterogeneous with args: --mode native_cpu --tasks 9000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003511.csv
+bench_heterogeneous: tasks=9000 light=4500 medium=2700 heavy=1800 mode=native_cpu time=167696.060 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_9000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_cpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=9000, total_elements=171417600
+
+--- Memory ---
+RAM:  used avg=471 MB  max=483 MB  of 8188 MB (5.9% peak)
+VRAM: used avg=49 MB  max=99 MB  of 0 MB (0.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=0.9%  max=8.0%  samples=265
+CPU total: usr avg=8.1% max=10.0% | sys avg=50.0% max=99.0% | samples=265
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  9: avg= 19.6%  peak= 90.0%  (usr=5.6 sys=4.0) samples=265  <- active
+  core 10: avg= 16.8%  peak= 90.0%  (usr=0.4 sys=3.8) samples=265  <- active
+  core  3: avg= 16.2%  peak= 90.0%  (usr=18.9 sys=4.7) samples=266  <- active
+  core 11: avg= 15.1%  peak= 90.0%  (usr=0.2 sys=2.8) samples=265  <- active
+  core  4: avg= 15.0%  peak= 90.0%  (usr=0.3 sys=3.2) samples=266  <- active
+  core  5: avg= 12.7%  peak= 90.0%  (usr=0.2 sys=1.9) samples=266  <- active
+  core  1: avg= 10.8%  peak= 90.0%  (usr=0.2 sys=2.7) samples=266  <- active
+  core  2: avg= 10.0%  peak= 90.0%  (usr=0.4 sys=4.9) samples=266  <- active
+  core  8: avg=  8.4%  peak= 90.0%  (usr=0.2 sys=2.2) samples=265  <- active
+  core  0: avg=  6.8%  peak= 90.0%  (usr=64.4 sys=3.1) samples=266  <- active
+  core  7: avg=  6.7%  peak= 90.0%  (usr=0.2 sys=2.2) samples=265  <- active
+  core  6: avg=  5.1%  peak= 90.0%  (usr=10.9 sys=1.6) samples=265  <- active
+
+Active cores (avg>=5% or peak>=20%): CPU9, CPU10, CPU3, CPU11, CPU4, CPU5, CPU1, CPU2, CPU8, CPU0, CPU7, CPU6
+All cores: avg used=11.9%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 167696.1 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003511.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003511_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_9000.json
+--- heterogeneous mode=native_cpu tasks=15000 ---
+Running bench_heterogeneous with args: --mode native_cpu --tasks 15000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003802.csv
+bench_heterogeneous: tasks=15000 light=7500 medium=4500 heavy=3000 mode=native_cpu time=277986.667 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_15000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_cpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=15000, total_elements=285696000
+
+--- Memory ---
+RAM:  used avg=482 MB  max=483 MB  of 8188 MB (5.9% peak)
+VRAM: used avg=48 MB  max=99 MB  of 6 MB (1650.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=1.0%  max=9.0%  samples=438
+CPU total: usr avg=8.1% max=15.0% | sys avg=51.2% max=99.0% | samples=438
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  0: avg= 19.8%  peak= 90.0%  (usr=11.0 sys=4.7) samples=438  <- active
+  core  2: avg= 19.1%  peak= 90.0%  (usr=0.9 sys=4.8) samples=438  <- active
+  core  1: avg= 18.1%  peak= 90.0%  (usr=8.5 sys=4.6) samples=438  <- active
+  core  6: avg= 16.3%  peak= 90.0%  (usr=0.4 sys=2.8) samples=438  <- active
+  core  8: avg= 14.5%  peak= 90.0%  (usr=0.3 sys=3.1) samples=438  <- active
+  core  7: avg= 14.4%  peak= 90.0%  (usr=0.3 sys=3.2) samples=438  <- active
+  core 10: avg=  9.9%  peak= 90.0%  (usr=0.1 sys=1.8) samples=438  <- active
+  core  5: avg=  8.4%  peak= 90.0%  (usr=0.2 sys=2.1) samples=438  <- active
+  core 11: avg=  7.7%  peak= 90.0%  (usr=0.2 sys=2.1) samples=438  <- active
+  core  4: avg=  7.4%  peak= 90.0%  (usr=0.2 sys=1.9) samples=438  <- active
+  core  3: avg=  4.3%  peak= 90.0%  (usr=48.2 sys=2.7) samples=438  <- active
+  core  9: avg=  3.1%  peak= 90.0%  (usr=32.0 sys=3.0) samples=438  <- active
+
+Active cores (avg>=5% or peak>=20%): CPU0, CPU2, CPU1, CPU6, CPU8, CPU7, CPU10, CPU5, CPU11, CPU4, CPU3, CPU9
+All cores: avg used=11.9%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 277986.7 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003802.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003802_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_cpu_15000.json
+--- heterogeneous mode=native_gpu tasks=3000 ---
+Running bench_heterogeneous with args: --mode native_gpu --tasks 3000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_3000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004246.csv
+bench_heterogeneous: tasks=3000 light=1500 medium=900 heavy=600 mode=native_gpu time=998.530 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_3000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_gpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=3000, total_elements=57139200
+
+--- Memory ---
+RAM:  used avg=966 MB  max=1455 MB  of 8188 MB (17.8% peak)
+VRAM: used avg=47 MB  max=70 MB  of 100 MB (70.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=3.8%  max=8.0%  samples=4
+CPU total: usr avg=5.8% max=8.0% | sys avg=40.8% max=99.0% | samples=4
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  1: avg= 28.5%  peak= 90.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  8: avg= 22.5%  peak= 90.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  9: avg= 14.2%  peak= 57.0%  (usr=13.2 sys=14.2) samples=4  <- active
+  core  2: avg= 19.8%  peak= 45.0%  (usr=4.2 sys=18.5) samples=4  <- active
+  core  7: avg= 19.5%  peak= 45.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  6: avg= 11.2%  peak= 45.0%  (usr=1.5 sys=25.5) samples=4  <- active
+  core  0: avg= 11.2%  peak= 45.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  5: avg= 14.2%  peak= 33.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  4: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=4
+  core  3: avg=  0.0%  peak=  0.0%  (usr=52.5 sys=0.0) samples=4
+  core 11: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=4
+  core 10: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=4
+
+Active cores (avg>=5% or peak>=20%): CPU1, CPU8, CPU9, CPU2, CPU7, CPU6, CPU0, CPU5
+Mostly idle: CPU4, CPU3, CPU11, CPU10
+All cores: avg used=11.8%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 998.5 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004246.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004246_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_3000.json
+--- heterogeneous mode=native_gpu tasks=9000 ---
+Running bench_heterogeneous with args: --mode native_gpu --tasks 9000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004248.csv
+bench_heterogeneous: tasks=9000 light=4500 medium=2700 heavy=1800 mode=native_gpu time=2538.944 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_9000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_gpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=9000, total_elements=171417600
+
+--- Memory ---
+RAM:  used avg=1384 MB  max=3199 MB  of 8188 MB (39.1% peak)
+VRAM: used avg=49 MB  max=88 MB  of 100 MB (88.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=2.9%  max=8.0%  samples=9
+CPU total: usr avg=5.9% max=9.0% | sys avg=56.8% max=99.0% | samples=9
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  2: avg= 24.1%  peak= 90.0%  (usr=0.3 sys=5.0) samples=9  <- active
+  core  6: avg= 21.3%  peak= 90.0%  (usr=0.7 sys=10.0) samples=9  <- active
+  core  4: avg= 21.2%  peak= 90.0%  (usr=0.7 sys=7.6) samples=9  <- active
+  core  9: avg= 13.3%  peak= 75.0%  (usr=38.1 sys=8.3) samples=9  <- active
+  core  3: avg= 13.8%  peak= 67.0%  (usr=33.2 sys=8.4) samples=9  <- active
+  core  7: avg= 21.6%  peak= 66.0%  (usr=2.9 sys=17.6) samples=9  <- active
+  core  8: avg= 16.7%  peak= 57.0%  (usr=0.3 sys=6.3) samples=9  <- active
+  core  0: avg= 10.2%  peak= 57.0%  (usr=0.0 sys=0.0) samples=10  <- active
+  core 10: avg= 14.2%  peak= 50.0%  (usr=0.3 sys=3.7) samples=9  <- active
+  core  1: avg=  5.3%  peak= 45.0%  (usr=0.0 sys=0.0) samples=9  <- active
+  core 11: avg=  3.7%  peak= 33.0%  (usr=0.3 sys=5.0) samples=9  <- active
+  core  5: avg=  0.0%  peak=  0.0%  (usr=0.0 sys=0.0) samples=9
+
+Active cores (avg>=5% or peak>=20%): CPU2, CPU6, CPU4, CPU9, CPU3, CPU7, CPU8, CPU0, CPU10, CPU1, CPU11
+Mostly idle: CPU5
+All cores: avg used=13.8%  peak on one core=90.0%
+
+--- Timing / overhead ---
+Total wall time: 2538.9 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004248.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004248_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_9000.json
+--- heterogeneous mode=native_gpu tasks=15000 ---
+Running bench_heterogeneous with args: --mode native_gpu --tasks 15000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004254.csv
+bench_heterogeneous: tasks=15000 light=7500 medium=4500 heavy=3000 mode=native_gpu time=4062.202 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_15000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: native_gpu
+Params: heavy_size=65536, light_size=2048, medium_size=16384, tasks=15000, total_elements=285696000
+
+--- Memory ---
+RAM:  used avg=2263 MB  max=4943 MB  of 8188 MB (60.4% peak)
+VRAM: used avg=49 MB  max=93 MB  of 100 MB (93.0% peak)
+
+--- Utilization ---
+GPU compute util: avg=2.7%  max=8.0%  samples=15
+CPU total: usr avg=6.1% max=8.0% | sys avg=53.1% max=96.0% | samples=15
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core  3: avg= 20.4%  peak= 97.0%  (usr=29.2 sys=1.1) samples=15  <- active
+  core  2: avg= 23.0%  peak= 90.0%  (usr=0.4 sys=5.2) samples=15  <- active
+  core  6: avg= 21.9%  peak= 90.0%  (usr=0.6 sys=9.0) samples=15  <- active
+  core  0: avg= 15.7%  peak= 90.0%  (usr=0.6 sys=7.7) samples=16  <- active
+  core 11: avg=  9.0%  peak= 90.0%  (usr=0.2 sys=2.2) samples=15  <- active
+  core 10: avg=  9.8%  peak= 69.0%  (usr=40.2 sys=2.2) samples=15  <- active
+  core  7: avg= 25.5%  peak= 67.0%  (usr=0.2 sys=2.2) samples=15  <- active
+  core  8: avg= 13.1%  peak= 67.0%  (usr=0.2 sys=2.2) samples=15  <- active
+  core  1: avg= 11.8%  peak= 66.0%  (usr=1.6 sys=9.9) samples=16  <- active
+  core  5: avg=  9.8%  peak= 57.0%  (usr=0.2 sys=3.8) samples=15  <- active
+  core  9: avg=  3.8%  peak= 57.0%  (usr=5.0 sys=0.0) samples=15  <- active
+  core  4: avg=  3.9%  peak= 45.0%  (usr=0.0 sys=0.0) samples=15  <- active
+
+Active cores (avg>=5% or peak>=20%): CPU3, CPU2, CPU6, CPU0, CPU11, CPU10, CPU7, CPU8, CPU1, CPU5, CPU9, CPU4
+All cores: avg used=14.0%  peak on one core=97.0%
+
+--- Timing / overhead ---
+Total wall time: 4062.2 ms
+Native path: no StarPU phase breakdown (total = compute + I/O)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004254.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004254_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_native_gpu_15000.json
+--- heterogeneous mode=starpu_hybrid tasks=3000 ---
+Running bench_heterogeneous with args: --mode starpu_hybrid --tasks 3000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_3000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004304.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_heterogeneous: tasks=3000 light=1500 medium=900 heavy=600 mode=starpu_hybrid time=1029.168 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_3000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: starpu_hybrid
+Params: heavy_size=65536, light_size=2048, medium_size=16384, starpu_sched=dmda, tasks=3000, total_elements=57139200
+
+--- Memory ---
+RAM:  used avg=721 MB  max=1285 MB  of 8188 MB (15.7% peak)
+VRAM: used avg=22 MB  max=47 MB  of 93 MB (50.5% peak)
+
+--- Utilization ---
+GPU compute util: avg=3.8%  max=8.0%  samples=4
+CPU total: usr avg=23.2% max=50.0% | sys avg=51.2% max=89.0% | samples=4
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core 11: avg= 21.0%  peak= 70.0%  (usr=8.8 sys=21.0) samples=4  <- active
+  core  0: avg= 39.8%  peak= 57.0%  (usr=40.8 sys=35.2) samples=4  <- active
+  core  1: avg= 25.5%  peak= 57.0%  (usr=40.5 sys=1.8) samples=4  <- active
+  core  8: avg= 14.2%  peak= 57.0%  (usr=0.8 sys=11.2) samples=4  <- active
+  core  6: avg= 14.2%  peak= 57.0%  (usr=0.8 sys=8.2) samples=4  <- active
+  core  7: avg= 14.8%  peak= 45.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  4: avg= 11.2%  peak= 45.0%  (usr=41.0 sys=7.2) samples=4  <- active
+  core  2: avg= 11.2%  peak= 45.0%  (usr=41.2 sys=13.0) samples=4  <- active
+  core 10: avg= 11.2%  peak= 45.0%  (usr=0.0 sys=0.0) samples=4  <- active
+  core  9: avg=  7.2%  peak= 29.0%  (usr=27.5 sys=17.8) samples=4  <- active
+  core  5: avg=  0.0%  peak=  0.0%  (usr=40.5 sys=1.8) samples=4
+  core  3: avg=  0.0%  peak=  0.0%  (usr=41.0 sys=7.2) samples=4
+
+Active cores (avg>=5% or peak>=20%): CPU11, CPU0, CPU1, CPU8, CPU6, CPU7, CPU4, CPU2, CPU10, CPU9
+Mostly idle: CPU5, CPU3
+All cores: avg used=14.2%  peak on one core=70.0%
+
+--- Timing / overhead ---
+Total wall time: 1029.2 ms
+StarPU breakdown:
+  StarPU init                     186.7 ms  (18.1%)
+  Data registration                10.6 ms  ( 1.0%)
+  Task submission                  17.1 ms  ( 1.7%)
+  Task wait (compute+transfer)    723.9 ms  (70.3%)
+  Data unregister                  90.8 ms  ( 8.8%)
+  Overhead (excl. wait)           305.3 ms  (29.7%)
+  Useful wait phase               723.9 ms  (70.3%)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004304.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004304_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_3000.json
+--- heterogeneous mode=starpu_hybrid tasks=9000 ---
+Running bench_heterogeneous with args: --mode starpu_hybrid --tasks 9000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_9000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004307.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_heterogeneous: tasks=9000 light=4500 medium=2700 heavy=1800 mode=starpu_hybrid time=2687.497 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_9000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: starpu_hybrid
+Params: heavy_size=65536, light_size=2048, medium_size=16384, starpu_sched=dmda, tasks=9000, total_elements=171417600
+
+--- Memory ---
+RAM:  used avg=1232 MB  max=2629 MB  of 8188 MB (32.1% peak)
+VRAM: used avg=47 MB  max=87 MB  of 99 MB (87.9% peak)
+
+--- Utilization ---
+GPU compute util: avg=3.4%  max=8.0%  samples=10
+CPU total: usr avg=22.5% max=51.0% | sys avg=51.0% max=97.0% | samples=10
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core 11: avg= 34.0%  peak= 93.0%  (usr=5.4 sys=14.2) samples=10  <- active
+  core  0: avg= 32.1%  peak= 93.0%  (usr=36.5 sys=24.8) samples=10  <- active
+  core  8: avg= 39.7%  peak= 90.0%  (usr=1.5 sys=25.0) samples=10  <- active
+  core  6: avg= 22.0%  peak= 90.0%  (usr=0.6 sys=7.8) samples=10  <- active
+  core  4: avg= 11.2%  peak= 67.0%  (usr=39.5 sys=14.4) samples=10  <- active
+  core  7: avg= 14.7%  peak= 57.0%  (usr=0.3 sys=4.5) samples=10  <- active
+  core  3: avg= 10.0%  peak= 57.0%  (usr=58.6 sys=15.7) samples=10  <- active
+  core  5: avg=  5.7%  peak= 57.0%  (usr=39.4 sys=7.1) samples=10  <- active
+  core  2: avg= 12.3%  peak= 45.0%  (usr=38.9 sys=7.6) samples=10  <- active
+  core  9: avg=  9.0%  peak= 45.0%  (usr=11.7 sys=2.4) samples=10  <- active
+  core 10: avg=  9.0%  peak= 45.0%  (usr=0.3 sys=4.5) samples=10  <- active
+  core  1: avg=  0.0%  peak=  0.0%  (usr=40.0 sys=16.1) samples=10
+
+Active cores (avg>=5% or peak>=20%): CPU11, CPU0, CPU8, CPU6, CPU4, CPU7, CPU3, CPU5, CPU2, CPU9, CPU10
+Mostly idle: CPU1
+All cores: avg used=16.6%  peak on one core=93.0%
+
+--- Timing / overhead ---
+Total wall time: 2687.5 ms
+StarPU breakdown:
+  StarPU init                     226.5 ms  ( 8.4%)
+  Data registration                32.1 ms  ( 1.2%)
+  Task submission                  40.0 ms  ( 1.5%)
+  Task wait (compute+transfer)   2125.9 ms  (79.1%)
+  Data unregister                 263.0 ms  ( 9.8%)
+  Overhead (excl. wait)           561.6 ms  (20.9%)
+  Useful wait phase              2125.9 ms  (79.1%)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004307.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004307_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_9000.json
+--- heterogeneous mode=starpu_hybrid tasks=15000 ---
+Running bench_heterogeneous with args: --mode starpu_hybrid --tasks 15000 --light-ratio 0.5 --medium-ratio 0.3 --light-size 2048 --medium-size 16384 --heavy-size 65536 --output /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_15000.json
+System metrics -> /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004313.csv
+Authorization required, but no authorization protocol specified
+
+[starpu][_starpu_init_cuda_config] Warning: could not find location of CUDA0, do you have the hwloc CUDA plugin installed?
+bench_heterogeneous: tasks=15000 light=7500 medium=4500 heavy=3000 mode=starpu_hybrid time=4324.679 ms -> /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_15000.json
+=== Run summary ===
+Scenario: heterogeneous  mode: starpu_hybrid
+Params: heavy_size=65536, light_size=2048, medium_size=16384, starpu_sched=dmda, tasks=15000, total_elements=285696000
+
+--- Memory ---
+RAM:  used avg=1650 MB  max=4005 MB  of 8188 MB (48.9% peak)
+VRAM: used avg=50 MB  max=96 MB  of 89 MB (107.9% peak)
+
+--- Utilization ---
+GPU compute util: avg=3.0%  max=8.0%  samples=16
+CPU total: usr avg=21.4% max=51.0% | sys avg=46.2% max=94.0% | samples=16
+
+--- CPU cores ---
+Per-core load (sorted by peak used %%):
+  core 10: avg= 17.1%  peak= 97.0%  (usr=3.6 sys=15.4) samples=16  <- active
+  core 11: avg= 28.8%  peak= 90.0%  (usr=1.0 sys=9.3) samples=16  <- active
+  core  7: avg= 24.1%  peak= 90.0%  (usr=0.2 sys=3.6) samples=16  <- active
+  core  1: avg=  5.6%  peak= 90.0%  (usr=37.7 sys=2.8) samples=16  <- active
+  core  6: avg= 21.6%  peak= 86.0%  (usr=0.8 sys=12.8) samples=16  <- active
+  core  0: avg= 14.3%  peak= 86.0%  (usr=37.7 sys=3.6) samples=16  <- active
+  core  3: avg=  9.9%  peak= 79.0%  (usr=37.5 sys=0.0) samples=16  <- active
+  core  9: avg=  8.1%  peak= 70.0%  (usr=0.2 sys=2.1) samples=16  <- active
+  core  2: avg= 11.9%  peak= 67.0%  (usr=37.7 sys=2.1) samples=16  <- active
+  core  8: avg= 14.9%  peak= 57.0%  (usr=0.0 sys=0.0) samples=16  <- active
+  core  4: avg=  2.1%  peak= 33.0%  (usr=67.2 sys=5.6) samples=16  <- active
+  core  5: avg=  0.0%  peak=  0.0%  (usr=37.5 sys=0.0) samples=16
+
+Active cores (avg>=5% or peak>=20%): CPU10, CPU11, CPU7, CPU1, CPU6, CPU0, CPU3, CPU9, CPU2, CPU8, CPU4
+Mostly idle: CPU5
+All cores: avg used=13.2%  peak on one core=97.0%
+
+--- Timing / overhead ---
+Total wall time: 4324.7 ms
+StarPU breakdown:
+  StarPU init                     238.7 ms  ( 5.5%)
+  Data registration                52.9 ms  ( 1.2%)
+  Task submission                  63.7 ms  ( 1.5%)
+  Task wait (compute+transfer)   3538.4 ms  (81.8%)
+  Data unregister                 430.9 ms  (10.0%)
+  Overhead (excl. wait)           786.2 ms  (18.2%)
+  Useful wait phase              3538.4 ms  (81.8%)
+
+--- Metrics files ---
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004313.csv
+  /home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004313_cores.csv
+  /home/nikitos/task_scheduler/results/report/heterogeneous_starpu_hybrid_15000.json
+Finished ср 10 июнь 2026 00:43:24 MSK
+JSON count: 51

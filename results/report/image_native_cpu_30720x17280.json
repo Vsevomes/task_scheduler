@@ -1,0 +1,19 @@
+{
+  "scenario": "image",
+  "mode": "native_cpu",
+  "params": {
+    "height": "17280",
+    "mixed_ops": "true",
+    "operation": "blur",
+    "tile_border_policy": "per_tile_simplified_borders_no_halo",
+    "tile_size": "64",
+    "width": "30720"
+  },
+  "metrics": {
+    "megapixels": 530.841600,
+    "task_count": 129600.000000,
+    "total_time_ms": 3981.241133
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_image_20260608_100604.csv",
+  "starpu_trace_prefix": "results/trace_image_"
+}

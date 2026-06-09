@@ -1,0 +1,22 @@
+{
+  "scenario": "independent",
+  "mode": "starpu_hybrid",
+  "params": {
+    "block_size": "4096",
+    "starpu_sched": "dmda",
+    "tasks": "1500",
+    "total_elements": "6144000"
+  },
+  "metrics": {
+    "avg_task_ms": 0.174552,
+    "starpu_data_registration_ms": 5.257394,
+    "starpu_data_unregister_ms": 16.727249,
+    "starpu_init_ms": 221.715231,
+    "starpu_task_submission_ms": 8.681039,
+    "starpu_wait_ms": 9.441117,
+    "task_count": 1500.000000,
+    "total_time_ms": 261.827712
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_independent_20260610_003410.csv",
+  "starpu_trace_prefix": "results/trace_independent_"
+}

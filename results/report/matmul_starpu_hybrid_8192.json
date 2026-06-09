@@ -1,0 +1,22 @@
+{
+  "scenario": "matmul",
+  "mode": "starpu_hybrid",
+  "params": {
+    "size": "8192",
+    "starpu_sched": "dmda",
+    "submitted_tasks": "1024",
+    "tile_size": "256"
+  },
+  "metrics": {
+    "gflops": 0.625910,
+    "starpu_data_registration_ms": 258.639034,
+    "starpu_data_unregister_copyback_ms": 153.465088,
+    "starpu_init_ms": 213.411794,
+    "starpu_task_submission_ms": 127.523880,
+    "starpu_wait_ms": 1755908.736746,
+    "task_count": 1024.000000,
+    "total_time_ms": 1756661.874739
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_matmul_20260608_093316.csv",
+  "starpu_trace_prefix": "results/trace_matmul_"
+}

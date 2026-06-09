@@ -1,0 +1,19 @@
+{
+  "scenario": "heterogeneous",
+  "mode": "native_cpu",
+  "params": {
+    "heavy_size": "65536",
+    "light_size": "2048",
+    "medium_size": "16384",
+    "tasks": "15000",
+    "total_elements": "285696000"
+  },
+  "metrics": {
+    "heavy_tasks": 3000.000000,
+    "light_tasks": 7500.000000,
+    "medium_tasks": 4500.000000,
+    "total_time_ms": 277986.666646
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_heterogeneous_20260610_003802.csv",
+  "starpu_trace_prefix": "results/trace_heterogeneous_"
+}

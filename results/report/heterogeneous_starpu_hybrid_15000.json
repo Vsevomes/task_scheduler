@@ -1,0 +1,25 @@
+{
+  "scenario": "heterogeneous",
+  "mode": "starpu_hybrid",
+  "params": {
+    "heavy_size": "65536",
+    "light_size": "2048",
+    "medium_size": "16384",
+    "starpu_sched": "dmda",
+    "tasks": "15000",
+    "total_elements": "285696000"
+  },
+  "metrics": {
+    "heavy_tasks": 3000.000000,
+    "light_tasks": 7500.000000,
+    "medium_tasks": 4500.000000,
+    "starpu_data_registration_ms": 52.948755,
+    "starpu_data_unregister_ms": 430.863014,
+    "starpu_init_ms": 238.666572,
+    "starpu_task_submission_ms": 63.715975,
+    "starpu_wait_ms": 3538.373361,
+    "total_time_ms": 4324.678628
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_heterogeneous_20260610_004313.csv",
+  "starpu_trace_prefix": "results/trace_heterogeneous_"
+}

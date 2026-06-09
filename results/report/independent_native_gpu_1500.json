@@ -1,0 +1,16 @@
+{
+  "scenario": "independent",
+  "mode": "native_gpu",
+  "params": {
+    "block_size": "4096",
+    "tasks": "1500",
+    "total_elements": "6144000"
+  },
+  "metrics": {
+    "avg_task_ms": 0.162270,
+    "task_count": 1500.000000,
+    "total_time_ms": 243.404415
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_independent_20260610_003406.csv",
+  "starpu_trace_prefix": "results/trace_independent_"
+}

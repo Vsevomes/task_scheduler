@@ -1,0 +1,19 @@
+{
+  "scenario": "heterogeneous",
+  "mode": "native_gpu",
+  "params": {
+    "heavy_size": "65536",
+    "light_size": "2048",
+    "medium_size": "16384",
+    "tasks": "1000",
+    "total_elements": "19046400"
+  },
+  "metrics": {
+    "heavy_tasks": 200.000000,
+    "light_tasks": 500.000000,
+    "medium_tasks": 300.000000,
+    "total_time_ms": 479.557138
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_heterogeneous_20260608_100532.csv",
+  "starpu_trace_prefix": "results/trace_heterogeneous_"
+}

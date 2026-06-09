@@ -1,0 +1,25 @@
+{
+  "scenario": "image",
+  "mode": "starpu_hybrid",
+  "params": {
+    "height": "17280",
+    "mixed_ops": "true",
+    "operation": "blur",
+    "starpu_sched": "dmda",
+    "tile_border_policy": "per_tile_simplified_borders_no_halo",
+    "tile_size": "64",
+    "width": "30720"
+  },
+  "metrics": {
+    "megapixels": 530.841600,
+    "starpu_data_registration_ms": 1256.329712,
+    "starpu_data_unregister_copyback_ms": 432.298820,
+    "starpu_init_ms": 228.476231,
+    "starpu_task_submission_ms": 547.553910,
+    "starpu_wait_ms": 165.174942,
+    "task_count": 129600.000000,
+    "total_time_ms": 2649.516432
+  },
+  "system_metrics_csv": "/home/nikitos/task_scheduler/results/system_image_20260608_100709.csv",
+  "starpu_trace_prefix": "results/trace_image_"
+}
